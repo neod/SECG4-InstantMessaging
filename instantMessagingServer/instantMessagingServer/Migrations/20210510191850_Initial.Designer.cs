@@ -8,7 +8,7 @@ using instantMessagingServer.Models;
 
 namespace instantMessagingServer.Migrations
 {
-    [DbContext(typeof(Database))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20210510191850_Initial")]
     partial class Initial
     {
