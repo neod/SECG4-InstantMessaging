@@ -6,31 +6,21 @@ namespace Crypto
 {
     public class RSAManager
     {
-        private static RSAManager CryptoInstance;
         private readonly RSAEncryptionPadding EncryptionPadding = RSAEncryptionPadding.Pkcs1;
         private readonly RSASignaturePadding SignaturPadding = RSASignaturePadding.Pkcs1;
         private readonly HashAlgorithmName hashAlgorithmName = HashAlgorithmName.SHA512;
 
-        public static RSAManager getInstance()
-        {
-            return CryptoInstance ??= new RSAManager();
-        }
-
         private RSA Rsa { get; set; }
-
-        public void SetKey(string key)
-        {
-            Rsa.FromXmlString(key);
-        }
 
         public string GetKey(bool withPrivateKey)
         {
             return Rsa.ToXmlString(withPrivateKey);
         }
 
-        private RSAManager()
+        public RSAManager(string key)
         {
             Rsa = RSA.Create();
+            Rsa.FromXmlString(key);
         }
 
         #region Encrypt
