@@ -31,6 +31,7 @@ namespace instantMessagingServer.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Users>().HasKey(u => u.Id);
+            modelBuilder.Entity<Users>().Property(u => u.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Users>().HasIndex(u => u.Username).IsUnique();
 
             modelBuilder.Entity<Tokens>().HasKey(t => t.UserId);

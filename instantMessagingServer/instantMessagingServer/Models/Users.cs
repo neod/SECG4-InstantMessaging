@@ -12,19 +12,20 @@ namespace instantMessagingServer.Models
         public string Password { get; set; }
         public DateTime ExpirtationDate { get; set; }
 
-        public Users(string username, string password, DateTime expirtationDate) : 
-            this(-1, username, password, expirtationDate)
+        public Users(string username, string password)
         {
-            
+            Username = username ?? throw new ArgumentNullException(nameof(username));
+            Password = password ?? throw new ArgumentNullException(nameof(password));
+            ExpirtationDate = DateTime.Now;
         }
         
 
-        public Users(int id, string username, string password, DateTime expirtationDate)
+        public Users(int id, string username, string password)
         {
             Id = id;
             Username = username ?? throw new ArgumentNullException(nameof(username));
             Password = password ?? throw new ArgumentNullException(nameof(password));
-            ExpirtationDate = expirtationDate;
+            ExpirtationDate = DateTime.Now;
         }
     }
 }
