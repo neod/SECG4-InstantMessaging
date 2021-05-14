@@ -21,30 +21,43 @@ namespace instantMessagingServer.Controllers
             this.Configuration = Configuration;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
+        // Users inscription
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        public IActionResult Connexion([FromBody] UsersBasic user)
         {
+            DatabaseContext db = new DatabaseContext(Configuration);
+            if (String.IsNullOrEmpty(user.Username) || String.IsNullOrEmpty(user.Password))
+            {
+                return BadRequest($"{nameof(ArgumentNullException)}: {nameof(user.Username)} and {nameof(user.Password)} are mendatory");
+            }
+
+            return Ok();
+
+        }
+
+        // Users inscription
+        // PUT api/<UsersController>/5
+        [HttpPut]
+        public IActionResult Inscription([FromBody] UsersBasic user)
+        {
+            DatabaseContext db = new DatabaseContext(Configuration);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest($"{nameof(ArgumentNullException)}: {nameof(user.Username)} and {nameof(user.Password)} are mendatory");
+            }
+            else if (db.Users.Where((u) => u.Username == user.Username).Count() != 0)
+            {
+                return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+            }
+            else
+            {
+                db.Users.Add(new Users(user.Username, user.Password));
+                db.SaveChanges();
+            }
+
+            return Ok();
+
         }
 
         // DELETE api/<UsersController>/5
