@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using instantMessagingServer.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,13 @@ namespace instantMessagingServer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IConfiguration Configuration;
+
+        public UsersController(IConfiguration Configuration)
+        {
+            this.Configuration = Configuration;
+        }
+
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()

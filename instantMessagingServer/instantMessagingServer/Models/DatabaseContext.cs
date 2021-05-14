@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace instantMessagingServer.Models
 {
     public class DatabaseContext : DbContext
     {
+        private IConfiguration Configuration;
+
         public DbSet<Users> Users { get; set; }
         public DbSet<Tokens> Tokens { get; set; }
         public DbSet<PublicKeys> PublicKeys { get; set; }
@@ -15,9 +18,14 @@ namespace instantMessagingServer.Models
         public DbSet<Friends> Friends { get; set; }
         public DbSet<Peers> Peers { get; set; }
 
+        public DatabaseContext(IConfiguration Configuration)
+        {
+            this.Configuration = Configuration;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlite("Data Source=instantMessaging.db");
+            options.UseSqlite(Configuration.GetConnectionString("sqlite"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
