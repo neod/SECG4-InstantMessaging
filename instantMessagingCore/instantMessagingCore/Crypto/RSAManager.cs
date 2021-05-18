@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Crypto
+namespace instantMessagingCore.Crypto
 {
     public class RSAManager
     {
