@@ -1,15 +1,18 @@
-﻿using instantMessagingServer.Models.Api;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace instantMessagingServer.Models.Dto
+namespace instantMessagingCore.Models.Dto
 {
-    public class Users : UsersBasic
+    public class Users
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "Username is required")]
+        public string Username { get; set; }
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
         public DateTime ExpirtationDate { get; set; }
 
         public Users()

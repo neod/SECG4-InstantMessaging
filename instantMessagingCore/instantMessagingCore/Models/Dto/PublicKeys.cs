@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace instantMessagingServer.Models.Dto
+namespace instantMessagingCore.Models.Dto
 {
     public class PublicKeys
     {
