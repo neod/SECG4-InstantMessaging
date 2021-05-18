@@ -10,7 +10,7 @@ namespace instantMessagingServer.Models
 {
     public class DatabaseContext : DbContext
     {
-        private IConfiguration Configuration;
+        private readonly IConfiguration Configuration;
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Tokens> Tokens { get; set; }
