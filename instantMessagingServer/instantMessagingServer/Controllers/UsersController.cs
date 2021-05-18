@@ -1,4 +1,5 @@
 ﻿using instantMessagingServer.Models;
+using instantMessagingServer.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
