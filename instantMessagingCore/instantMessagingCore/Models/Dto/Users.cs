@@ -8,11 +8,26 @@ namespace instantMessagingCore.Models.Dto
 {
     public class Users
     {
+        /// <summary>
+        /// The User id
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// The Username
+        /// </summary>
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }
+
+        /// <summary>
+        /// The user password
+        /// </summary>
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// The password expiration date
+        /// </summary>
         public DateTime ExpirtationDate { get; set; }
 
         public Users()

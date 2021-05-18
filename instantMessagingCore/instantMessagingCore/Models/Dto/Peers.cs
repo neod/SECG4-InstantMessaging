@@ -7,9 +7,24 @@ namespace instantMessagingCore.Models.Dto
 {
     public class Peers
     {
+        /// <summary>
+        /// The owner id
+        /// </summary>
         public int UserId { get; set; }
+
+        /// <summary>
+        /// The owner ip version 4
+        /// </summary>
         public string Ipv4 { get; set; }
+
+        /// <summary>
+        /// The owner ip version 6
+        /// </summary>
         public string Ipv6 { get; set; }
+
+        /// <summary>
+        /// The ower listening port
+        /// </summary>
         public ushort Port { get; set; }
         public DateTime LastHeartBeat { get; set; }
 

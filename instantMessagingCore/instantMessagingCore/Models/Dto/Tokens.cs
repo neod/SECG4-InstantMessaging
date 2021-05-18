@@ -7,8 +7,19 @@ namespace instantMessagingCore.Models.Dto
 {
     public class Tokens
     {
+        /// <summary>
+        /// The owner id
+        /// </summary>
         public int UserId { get; set; }
+
+        /// <summary>
+        /// The owner connexion token
+        /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// The token expiration date
+        /// </summary>
         public DateTime ExpirationDate { get; set; }
 
         public Tokens(int userId, string token, DateTime expirationDate)
