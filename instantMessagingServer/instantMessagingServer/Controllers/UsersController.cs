@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace instantMessagingServer.Controllers
 {
     [Route("api/[controller]")]
@@ -23,49 +21,60 @@ namespace instantMessagingServer.Controllers
             this.Configuration = Configuration;
         }
 
-        // Users inscription
-        // PUT api/<UsersController>/5
-        [HttpPost]
+        // PUT api/<UsersController>/Connexion
+        /// <summary>
+        /// Users connexion
+        /// </summary>
+        /// <param name="user">The user to connect</param>
+        /// <returns>The connexion token</returns>
+        [HttpPost("Connexion")]
         public IActionResult Connexion([FromBody] UsersBasic user)
         {
-            DatabaseContext db = new DatabaseContext(Configuration);
-            if (String.IsNullOrEmpty(user.Username) || String.IsNullOrEmpty(user.Password))
+            DatabaseContext db = new(Configuration);
+            if (ModelState.IsValid)
             {
-                return BadRequest($"{nameof(ArgumentNullException)}: {nameof(user.Username)} and {nameof(user.Password)} are mendatory");
+                //TODO: implémenter la connexion avec les tokens
             }
 
             return Ok();
-
         }
 
-        // Users inscription
-        // PUT api/<UsersController>/5
-        [HttpPut]
+        // PUT api/<UsersController>/Inscription
+        /// <summary>
+        /// Users inscription
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPut("Inscription")]
         public IActionResult Inscription([FromBody] UsersBasic user)
         {
-            DatabaseContext db = new DatabaseContext(Configuration);
+            DatabaseContext db = new(Configuration);
             if (!ModelState.IsValid)
             {
-                return BadRequest($"{nameof(ArgumentNullException)}: {nameof(user.Username)} and {nameof(user.Password)} are mendatory");
-            }
-            else if (db.Users.Where((u) => u.Username == user.Username).Count() != 0)
-            {
-                return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
-            }
-            else
-            {
-                db.Users.Add(new Users(user.Username, user.Password));
-                db.SaveChanges();
+                if (db.Users.Where((u) => u.Username == user.Username).Any())
+                {
+                    return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+                }
+                else
+                {
+                    db.Users.Add(new Users(user.Username, user.Password));
+                    db.SaveChanges();
+                }
             }
 
             return Ok();
 
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
+        // DELETE api/<UsersController>/Delete/5
+        /// <summary>
+        /// Users Delete
+        /// </summary>
+        /// <param name="id">The user id to delete</param>
+        [HttpDelete("Delete/{id}")]
         public void Delete(int id)
         {
+            //TODO: implémenter la suppresion d'un utilisateur(uniquement par lui meme)
         }
     }
 }
