@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace instantMessagingServer.Controllers
 {
@@ -30,13 +31,36 @@ namespace instantMessagingServer.Controllers
         [HttpPost("Connexion")]
         public IActionResult Connexion([FromBody] UsersBasic user)
         {
-            DatabaseContext db = new(Configuration);
+            IActionResult response = Unauthorized();
+            
             if (ModelState.IsValid)
             {
-                //TODO: implémenter la connexion avec les tokens
+                DatabaseContext db = new(Configuration);
+                var selectedUser = db.Users.Where((u) => u.Username == user.Username && u.Password == user.Password).FirstOrDefault();
+                if (selectedUser != null)
+                {
+                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+
+                    var dbToken = db.Tokens.Where((t) => t.UserId == selectedUser.Id).FirstOrDefault();
+                    if(dbToken == null)
+                    {
+                        dbToken = new Tokens(selectedUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                        db.Tokens.Add(dbToken);
+                    }
+                    else
+                    {
+                        dbToken.Token = token;
+                        dbToken.ExpirationDate = DateTime.Now.AddMinutes(JWTTokens.duration);
+                        db.Tokens.Update(dbToken);
+                    }
+                    
+                    db.SaveChanges();
+
+                    response = Ok(new { token });
+                }
             }
 
-            return Ok();
+            return response;
         }
 
         // PUT api/<UsersController>/Inscription
@@ -62,7 +86,7 @@ namespace instantMessagingServer.Controllers
                 }
             }
 
-            return Ok();
+            return Ok(JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]));
 
         }
 
