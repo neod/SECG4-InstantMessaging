@@ -72,21 +72,32 @@ namespace instantMessagingServer.Controllers
         [HttpPut("Inscription")]
         public IActionResult Inscription([FromBody] UsersBasic user)
         {
-            DatabaseContext db = new(Configuration);
+            IActionResult response = Unauthorized();
+
             if (!ModelState.IsValid)
             {
+                DatabaseContext db = new(Configuration);
+
                 if (db.Users.Where((u) => u.Username == user.Username).Any())
                 {
                     return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
                 }
                 else
                 {
-                    db.Users.Add(new Users(user.Username, user.Password));
+                    var newUser = new Users(user.Username, user.Password);
+                    db.Users.Add(newUser);
+
+                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+                    var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                    db.Tokens.Add(dbToken);
+
                     db.SaveChanges();
+
+                    response = Ok(token);
                 }
             }
 
-            return Ok(JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]));
+            return response;
 
         }
 
