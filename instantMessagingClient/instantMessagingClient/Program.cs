@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
-using instantMessagingCore.Crypto;
 
 namespace instantMessagingClient
 {
@@ -72,8 +71,11 @@ namespace instantMessagingClient
             {
                 Title = "Login";
                 Body = "-----";
-                MenuItems.Add(new MenuItem("Connect", () => Application.GoTo<Connect>()));
-                MenuItems.Add(new MenuItem("Forgot password?", () => Application.GoTo<ForgotPass>()));
+                string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
+                SecureString password = getPasswordFromConsole("Password: ");
+                Console.WriteLine();
+                //ConsoleHelpers.HitEnterToContinue();
+                //Application.GoTo<LoginPage>();
             }
         }
 
@@ -90,37 +92,6 @@ namespace instantMessagingClient
                 ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + user);
                 ConsoleHelpers.HitEnterToContinue();
                 Application.GoTo<LoginPage>();
-            }
-        }
-
-        public class Connect : Page
-        {
-            public Connect()
-            {
-                Title = "Connect";
-                TitleColor = ConsoleColor.Yellow;
-                Body = "-----";
-                string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
-                SecureString password = getPasswordFromConsole("Password: ");
-                Console.WriteLine();
-
-                RSAManager rsaManager = new RSAManager();
-                string key = rsaManager.GetKey(false);
-                ConsoleHelpers.WriteGreen(key);
-                
-                ConsoleHelpers.HitEnterToContinue();
-            }
-        }
-
-        public class ForgotPass : Page
-        {
-            public ForgotPass()
-            {
-                Title = "Forgot password";
-                TitleColor = ConsoleColor.Yellow;
-                Body = "-----";
-                
-                ConsoleHelpers.HitEnterToContinue();
             }
         }
 
