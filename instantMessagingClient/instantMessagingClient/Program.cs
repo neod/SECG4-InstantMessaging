@@ -7,7 +7,7 @@ using EasyConsoleApplication.Pages;
 
 namespace instantMessagingClient
 {
-    class Program
+    internal class Program
     {
         private static SecureString getPasswordFromConsole(string displayMessage)
         {
@@ -37,49 +37,14 @@ namespace instantMessagingClient
 
         private static void Main(string[] args)
         {
-            // set some global settings
             ConsoleSettings.DefaultColor = ConsoleColor.White;
 
-            // define the menu
             Menu mainMenu = new Menu("Instant messaging client");
             Application.GoTo<HomePage>();
 
             Application.Render(mainMenu);
             Console.WriteLine("Application Terminated.");
             ConsoleHelpers.HitEnterToContinue();
-
-
-            //string[] menuItems = { "Login", "Inscription"};
-            //Menu menuMain = new Menu(menuItems, "Main Menu");
-
-            /*switch (menuMain.displayMenu())
-            {
-                case 0:
-                {
-                    Console.WriteLine("Veuillez-vous connecter.");
-                    Console.WriteLine("------------------------");
-                    Console.Write("User: ");
-                    string user = Console.ReadLine();
-                    SecureString password = getPasswordFromConsole("Password: ");
-                    Console.WriteLine();
-                    Console.WriteLine("\nBonjour " + user + "\n");
-                }
-                    break;
-                case 1:
-                {
-                    Console.WriteLine("Choissisez un nom d'utilisateur et un mot de passe.");
-                    Console.WriteLine("---------------------------------------------------");
-                    Console.Write("User: ");
-                    string user = Console.ReadLine();
-                    SecureString password = getPasswordFromConsole("Password: ");
-                    Console.WriteLine();
-                    Console.WriteLine("\nBonjour " + user + "\n");
-                }
-                    break;
-                default:
-                    Console.WriteLine("whu?");
-                    break;
-            }*/
         }
 
         public class HomePage : Page
@@ -106,7 +71,11 @@ namespace instantMessagingClient
             {
                 Title = "Login";
                 Body = "-----";
-                
+                string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
+                SecureString password = getPasswordFromConsole("Password: ");
+                Console.WriteLine();
+                //ConsoleHelpers.HitEnterToContinue();
+                //Application.GoTo<LoginPage>();
             }
         }
 
