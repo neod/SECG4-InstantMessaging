@@ -30,29 +30,32 @@ namespace instantMessagingServer.Controllers
         {
             IActionResult response = Unauthorized();
 
-            if (!ModelState.IsValid) return response;
-            DatabaseContext db = new(Configuration);
-            var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
-            if (selectedUser == null) return response;
-            var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
-
-            var dbToken = db.Tokens.FirstOrDefault(t => t.UserId == selectedUser.Id);
-            if(dbToken == null)
+            if (ModelState.IsValid)
             {
-                dbToken = new Tokens(selectedUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
-                db.Tokens.Add(dbToken);
-            }
-            else
-            {
-                dbToken.Token = token;
-                dbToken.ExpirationDate = DateTime.Now.AddMinutes(JWTTokens.duration);
-                db.Tokens.Update(dbToken);
-            }
-                    
-            db.SaveChanges();
+                DatabaseContext db = new(Configuration);
+                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+                if (selectedUser != null)
+                {
+                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
 
-            response = Ok(new { token });
+                    var dbToken = db.Tokens.FirstOrDefault(t => t.UserId == selectedUser.Id);
+                    if (dbToken == null)
+                    {
+                        dbToken = new Tokens(selectedUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                        db.Tokens.Add(dbToken);
+                    }
+                    else
+                    {
+                        dbToken.Token = token;
+                        dbToken.ExpirationDate = DateTime.Now.AddMinutes(JWTTokens.duration);
+                        db.Tokens.Update(dbToken);
+                    }
 
+                    db.SaveChanges();
+
+                    response = Ok(new { token });
+                }
+            }
             return response;
         }
 
@@ -67,24 +70,26 @@ namespace instantMessagingServer.Controllers
         {
             IActionResult response = Unauthorized();
 
-            if (!ModelState.IsValid) return response;
-            DatabaseContext db = new(Configuration);
-
-            if (db.Users.Any(u => u.Username == user.Username))
+            if (ModelState.IsValid)
             {
-                return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+                DatabaseContext db = new(Configuration);
+
+                if (db.Users.Any(u => u.Username == user.Username))
+                {
+                    response = BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+                }
+
+                var newUser = new Users(user.Username, user.Password);
+                db.Users.Add(newUser);
+
+                var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+                var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                db.Tokens.Add(dbToken);
+
+                db.SaveChanges();
+
+                response = Ok(token);
             }
-
-            var newUser = new Users(user.Username, user.Password);
-            db.Users.Add(newUser);
-
-            var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
-            var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
-            db.Tokens.Add(dbToken);
-
-            db.SaveChanges();
-
-            response = Ok(token);
             return response;
         }
 
