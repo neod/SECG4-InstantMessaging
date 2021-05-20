@@ -116,17 +116,21 @@ namespace instantMessagingClient
                 TitleColor = ConsoleColor.Green;
                 Body = "-----";
                 MenuItems.Add(new MenuItem("Friends list", () => Application.GoTo<LoggedInFriendList>()));
-                MenuItems.Add(new MenuItem("Delete account", () => 
-                    ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
-                )
+                MenuItems.Add(new MenuItem("Delete account", deleteAccount)
                 {
                     Color = ConsoleColor.Red
                 });
-                MenuItems.Add(new MenuItem("Disconnect", Application.GoBack)
+                MenuItems.Add(new MenuItem("Disconnect", Application.Exit)
                 {
                     Color = ConsoleColor.Yellow
                 });
             }
+
+            private void deleteAccount()
+            {
+                ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?\n");
+            }
+
         }
 
         public class LoggedInFriendList : Page
@@ -164,6 +168,12 @@ namespace instantMessagingClient
         {
             public AddFriend()
             {
+                Console.WriteLine("If you want to go back, type '/back'");
+                string Name = ConsoleHelpers.Readline(ConsoleColor.White, "name: ");
+                if (Name == "/back")
+                {
+                    Application.GoTo<LoggedInHomePage>();
+                }
                 //do while name exists puis go back to LoggedInHomePage (psk le goback va pas fonctionner si on se mets sur friendlist)
             }
         }
@@ -200,6 +210,12 @@ namespace instantMessagingClient
             public MessageFriend(int ID)
             {
                 _ID = ID;
+                Console.WriteLine("If you want to go back, type '/back'");
+                string text = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
+                if (text == "/back")
+                {
+                    Application.GoTo<LoggedInHomePage>();
+                }
                 // /exit pour goback??
             }
         }
@@ -214,8 +230,8 @@ namespace instantMessagingClient
                 Title = "User" + _ID;
                 TitleColor = ConsoleColor.Green;
                 Body = "-----";
-                MenuItems.Add(new MenuItem("Add", () => Console.WriteLine("add")));
-                MenuItems.Add(new MenuItem("Remove", () =>
+                MenuItems.Add(new MenuItem("Accept", () => Console.WriteLine("add")));
+                MenuItems.Add(new MenuItem("Decline", () =>
                     ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
                 )
                 {
