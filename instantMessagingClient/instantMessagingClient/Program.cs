@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Security;
-using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace instantMessagingClient
 {
@@ -44,37 +42,29 @@ namespace instantMessagingClient
             ConsoleSettings.DefaultColor = ConsoleColor.White;
 
             Menu mainMenu = new Menu("Instant messaging client");
-            Application.GoTo<HomePage>();
-            
+            mainMenu.Items.Add(new MenuItem("Login", () => Application.GoTo<LoginPage>())
+            {
+                Color = ConsoleColor.Green
+            });
+            mainMenu.Items.Add(new MenuItem("Register", () => Application.GoTo<RegisterPage>())
+            {
+                Color = ConsoleColor.Yellow
+            });
+            mainMenu.Items.Add(Separator.Instance);
+            mainMenu.Items.Add(new MenuItem("Quit", Application.Exit));
+
             Application.Render(mainMenu);
             Console.WriteLine("Application Terminated.");
             ConsoleHelpers.HitEnterToContinue();
         }
-
-        public class HomePage : Page
-        {
-            public HomePage()
-            {
-                Title = "Home";
-                TitleColor = ConsoleColor.Green;
-                Body = "----";
-                BodyColor = ConsoleColor.DarkGreen;
-                MenuItems.Add(new MenuItem("Login", () => Application.GoTo<LoginPage>()));
-                MenuItems.Add(new MenuItem("Register", () => Application.GoTo<RegisterPage>())
-                {
-                    Color = ConsoleColor.Yellow
-                });
-                MenuItems.Add(Separator.Instance);
-                MenuItems.Add(new MenuItem("Quit", Application.Exit));
-            }
-        }
-
+        
         public class LoginPage : Page
         {
             public LoginPage()
             {
-                Title = "Login";
-                Body = "-----";
+                ConsoleHelpers.Write(ConsoleColor.Green, "Login");
+                ConsoleHelpers.Write(ConsoleColor.White, "-----");
+                ConsoleHelpers.Write(ConsoleColor.White, "Enter you username and password to login: ");
                 string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
                 SecureString password = getPasswordFromConsole("Password: ");
                 Console.WriteLine();
@@ -87,14 +77,14 @@ namespace instantMessagingClient
         {
             public RegisterPage()
             {
-                Title = "Register";
-                TitleColor = ConsoleColor.Yellow;
-                Body = "-----";
+                ConsoleHelpers.Write(ConsoleColor.Yellow, "Register");
+                ConsoleHelpers.Write(ConsoleColor.White, "-----");
 
                 Rest rest = new Rest();
                 IRestResponse response;
                 do
                 {
+                    //ask for username, pass until the response is correct
                     string username = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
                     SecureString password = getPasswordFromConsole("Password: ");
                     Console.WriteLine();
@@ -106,7 +96,7 @@ namespace instantMessagingClient
                         continue;
                     }
                     var token = response.Content;
-                    ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username);
+                    ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
                 }
                 while (response.StatusCode != HttpStatusCode.OK);
 
