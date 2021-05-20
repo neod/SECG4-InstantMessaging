@@ -4,10 +4,7 @@ using instantMessagingCore.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
 
 namespace instantMessagingServer.Controllers
 {
@@ -95,7 +92,6 @@ namespace instantMessagingServer.Controllers
                     response = Ok(token);
                 }
             }
-
             return response;
         }
 
