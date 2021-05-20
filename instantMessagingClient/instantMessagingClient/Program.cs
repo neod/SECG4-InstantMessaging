@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Security;
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Model;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace instantMessagingClient
 {
@@ -41,7 +45,7 @@ namespace instantMessagingClient
 
             Menu mainMenu = new Menu("Instant messaging client");
             Application.GoTo<HomePage>();
-
+            
             Application.Render(mainMenu);
             Console.WriteLine("Application Terminated.");
             ConsoleHelpers.HitEnterToContinue();
@@ -86,10 +90,26 @@ namespace instantMessagingClient
                 Title = "Register";
                 TitleColor = ConsoleColor.Yellow;
                 Body = "-----";
-                string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
-                SecureString password = getPasswordFromConsole("Password: ");
-                Console.WriteLine();
-                ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + user);
+
+                Rest rest = new Rest();
+                IRestResponse response;
+                do
+                {
+                    string username = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
+                    SecureString password = getPasswordFromConsole("Password: ");
+                    Console.WriteLine();
+
+                    response = rest.Inscription(username, password);
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists.");
+                        continue;
+                    }
+                    var token = response.Content;
+                    ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username);
+                }
+                while (response.StatusCode != HttpStatusCode.OK);
+
                 ConsoleHelpers.HitEnterToContinue();
                 Application.GoTo<LoginPage>();
             }
