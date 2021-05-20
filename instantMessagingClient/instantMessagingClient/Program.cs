@@ -64,12 +64,14 @@ namespace instantMessagingClient
             {
                 ConsoleHelpers.Write(ConsoleColor.Green, "Login");
                 ConsoleHelpers.Write(ConsoleColor.White, "-----");
-                ConsoleHelpers.Write(ConsoleColor.White, "Enter you username and password to login: ");
-                string user = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
+                ConsoleHelpers.Write(ConsoleColor.White, "Enter your username and password to login: ");
+                string username = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
                 SecureString password = getPasswordFromConsole("Password: ");
                 Console.WriteLine();
-                //ConsoleHelpers.HitEnterToContinue();
-                //Application.GoTo<LoginPage>();
+
+                ConsoleHelpers.Write(ConsoleColor.White, "Successfully logged in " + username + "!");
+                ConsoleHelpers.HitEnterToContinue();
+                Application.GoTo<LoggedInHomePage>();
             }
         }
 
@@ -80,6 +82,7 @@ namespace instantMessagingClient
                 ConsoleHelpers.Write(ConsoleColor.Yellow, "Register");
                 ConsoleHelpers.Write(ConsoleColor.White, "-----");
 
+                string token = "";
                 Rest rest = new Rest();
                 IRestResponse response;
                 do
@@ -95,7 +98,7 @@ namespace instantMessagingClient
                         ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists.");
                         continue;
                     }
-                    var token = response.Content;
+                    token = response.Content;
                     ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
                 }
                 while (response.StatusCode != HttpStatusCode.OK);
@@ -105,22 +108,123 @@ namespace instantMessagingClient
             }
         }
 
-        public class PageAvecParametre : Page
+        public class LoggedInHomePage : Page
         {
-            private readonly string _dependency;
-
-            public PageAvecParametre(string dependency)
+            public LoggedInHomePage()
             {
-                _dependency = dependency;
-                Title = "blabla";
-                TitleColor = ConsoleColor.Yellow;
+                Title = "Home";
+                TitleColor = ConsoleColor.Green;
                 Body = "-----";
-                MenuItems.Add(new MenuItem("Back", Application.GoBack));
-                MenuItems.Add(new MenuItem("Option 1", () => Console.WriteLine($"{_dependency} Action 2")));
-                MenuItems.Add(new MenuItem("Option 2", () => Console.WriteLine($"{_dependency} Action 3")));
+                MenuItems.Add(new MenuItem("Friends list", () => Application.GoTo<LoggedInFriendList>()));
+                MenuItems.Add(new MenuItem("Delete account", () => 
+                    ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
+                )
+                {
+                    Color = ConsoleColor.Red
+                });
+                MenuItems.Add(new MenuItem("Disconnect", Application.GoBack)
+                {
+                    Color = ConsoleColor.Yellow
+                });
+            }
+        }
+
+        public class LoggedInFriendList : Page
+        {
+            public LoggedInFriendList()
+            {
+                Title = "Friend list";
+                TitleColor = ConsoleColor.Green;
+                Body = "-----";
+                int i;
+                //for amis
+                for (i = 0; i < 2; i++)
+                {
+                    //passer id en parametre vers next fenetre
+                    MenuItems.Add(new MenuItem("Friend" + i, () => Application.GoTo<Friend>(i)));
+                }
+                //for notif
+                for (int j = 0; j < 2; j++)
+                {
+                    MenuItems.Add(new MenuItem("User" + (j + i) + " wants to add you.", () => Application.GoTo<Notification>(j + i))
+                    {
+                        Color = ConsoleColor.Green
+                    });
+                }
                 MenuItems.Add(Separator.Instance);
-                MenuItems.Add(new MenuItem("Back", Application.GoBack));
-                MenuItems.Add(new MenuItem("Quit", Application.Exit));
+                MenuItems.Add(new MenuItem("Add friend", () => Application.GoTo<AddFriend>()));
+                MenuItems.Add(new MenuItem("Go back", Application.GoBack)
+                {
+                    Color = ConsoleColor.Yellow
+                });
+            }
+        }
+
+        public class AddFriend : Page
+        {
+            public AddFriend()
+            {
+                //do while name exists puis go back to LoggedInHomePage (psk le goback va pas fonctionner si on se mets sur friendlist)
+            }
+        }
+
+        public class Friend : Page
+        {
+            private readonly int _ID;
+
+            public Friend(int ID)
+            {
+                _ID = ID;
+
+                Title = "Friend" + _ID;
+                TitleColor = ConsoleColor.Green;
+                Body = "-----";
+                MenuItems.Add(new MenuItem("Message", () => Application.GoTo<MessageFriend>(_ID)));
+                MenuItems.Add(new MenuItem("Delete from friendlist", () =>
+                    ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
+                )
+                {
+                    Color = ConsoleColor.Red
+                });
+                MenuItems.Add(new MenuItem("Go back", Application.GoBack)
+                {
+                    Color = ConsoleColor.Yellow
+                });
+            }
+        }
+
+        public class MessageFriend : Page
+        {
+            private readonly int _ID;
+
+            public MessageFriend(int ID)
+            {
+                _ID = ID;
+                // /exit pour goback??
+            }
+        }
+
+        public class Notification : Page
+        {
+            private readonly int _ID;
+            public Notification(int ID)
+            {
+                this._ID = ID;//notification id
+
+                Title = "User" + _ID;
+                TitleColor = ConsoleColor.Green;
+                Body = "-----";
+                MenuItems.Add(new MenuItem("Add", () => Console.WriteLine("add")));
+                MenuItems.Add(new MenuItem("Remove", () =>
+                    ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
+                )
+                {
+                    Color = ConsoleColor.Red
+                });
+                MenuItems.Add(new MenuItem("Go back", Application.GoBack)
+                {
+                    Color = ConsoleColor.Yellow
+                });
             }
         }
     }
