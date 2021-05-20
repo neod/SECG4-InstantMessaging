@@ -70,24 +70,26 @@ namespace instantMessagingServer.Controllers
         {
             IActionResult response = Unauthorized();
 
-            if (!ModelState.IsValid) return response;
-            DatabaseContext db = new(Configuration);
-
-            if (db.Users.Any(u => u.Username == user.Username))
+            if (ModelState.IsValid)
             {
-                return BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+                DatabaseContext db = new(Configuration);
+
+                if (db.Users.Any(u => u.Username == user.Username))
+                {
+                    response = BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
+                }
+
+                var newUser = new Users(user.Username, user.Password);
+                db.Users.Add(newUser);
+
+                var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+                var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                db.Tokens.Add(dbToken);
+
+                db.SaveChanges();
+
+                response = Ok(token);
             }
-
-            var newUser = new Users(user.Username, user.Password);
-            db.Users.Add(newUser);
-
-            var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
-            var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
-            db.Tokens.Add(dbToken);
-
-            db.SaveChanges();
-
-            response = Ok(token);
 
             return response;
         }
