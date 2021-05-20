@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
@@ -16,6 +12,17 @@ namespace instantMessagingClient.Pages
             Title = "Friend list";
             TitleColor = ConsoleColor.Green;
             Body = "-----";
+            PrintFriendsAndNotifications();
+            MenuItems.Add(Separator.Instance);
+            MenuItems.Add(new MenuItem("Add friend", () => Application.GoTo<AddFriend>()));
+            MenuItems.Add(new MenuItem("Go back", () => Application.GoTo<LoggedInHomePage>())
+            {
+                Color = ConsoleColor.Yellow
+            });
+        }
+
+        private void PrintFriendsAndNotifications()
+        {
             int i;
             //for amis
             for (i = 0; i < 2; i++)
@@ -24,6 +31,7 @@ namespace instantMessagingClient.Pages
                 int friendID = i;
                 MenuItems.Add(new MenuItem("Friend" + i, () => Application.GoTo<Friend>(friendID)));
             }
+
             //for notif
             for (int j = 0; j < 2; j++)
             {
@@ -33,12 +41,6 @@ namespace instantMessagingClient.Pages
                     Color = ConsoleColor.Green
                 });
             }
-            MenuItems.Add(Separator.Instance);
-            MenuItems.Add(new MenuItem("Add friend", () => Application.GoTo<AddFriend>()));
-            MenuItems.Add(new MenuItem("Go back", () => Application.GoTo<LoggedInHomePage>())
-            {
-                Color = ConsoleColor.Yellow
-            });
         }
     }
 }

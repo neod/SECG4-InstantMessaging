@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
@@ -19,17 +15,25 @@ namespace instantMessagingClient.Pages
             Title = "User" + _ID;
             TitleColor = ConsoleColor.Green;
             Body = "-----";
-            MenuItems.Add(new MenuItem("Accept", () => Console.WriteLine("add")));
-            MenuItems.Add(new MenuItem("Decline", () =>
-                ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?")
-            )
+            MenuItems.Add(new MenuItem("Accept", () =>
             {
-                Color = ConsoleColor.Red
-            });
+                Application.GoTo<FriendList>();
+            }));
+            MenuItems.Add(new MenuItem("Decline", Decline){ Color = ConsoleColor.Red});
             MenuItems.Add(new MenuItem("Go back", Application.GoBack)
             {
                 Color = ConsoleColor.Yellow
             });
+        }
+
+        private static void Decline()
+        {
+            ConsoleKeyInfo yesOrNo = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?");
+            if (yesOrNo.Key == ConsoleKey.Y)
+            {
+                //decline and go to friendlist
+                Application.GoTo<FriendList>();
+            }
         }
     }
 }

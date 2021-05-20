@@ -18,17 +18,27 @@ namespace instantMessagingClient.Pages
             string token = "";
             Rest rest = new Rest();
             IRestResponse response;
+
             do
             {
                 //ask for username, pass until the response is correct
-                string username = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
-                SecureString password = Program.getPasswordFromConsole("Password: ");
+                string username;
+                SecureString password;
+                do
+                {
+                    username = ConsoleHelpers.Readline(ConsoleColor.White, "Username: ");
+                    password = Program.getPasswordFromConsole("Password: ");
+                    if (username == null)
+                    {
+                        ConsoleHelpers.WriteRed("\nUsername/Password can't be empty");
+                    }
+                } while (username == null);
                 Console.WriteLine();
 
                 response = rest.Inscription(username, password);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists.");
+                    ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
                     continue;
                 }
                 token = response.Content;

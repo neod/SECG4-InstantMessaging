@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Net;
 using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
-using EasyConsoleApplication.Pages;
-using instantMessagingClient.Model;
 using instantMessagingClient.Pages;
-using RestSharp;
 
 namespace instantMessagingClient
 {
@@ -55,8 +51,6 @@ namespace instantMessagingClient
             mainMenu.Items.Add(new MenuItem("Quit", Application.Exit));
 
             Application.Render(mainMenu);
-            Console.WriteLine("Application Terminated.");
-            ConsoleHelpers.HitEnterToContinue();
         }
     }
 }
