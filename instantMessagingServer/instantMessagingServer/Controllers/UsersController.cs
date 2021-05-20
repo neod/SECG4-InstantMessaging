@@ -81,17 +81,19 @@ namespace instantMessagingServer.Controllers
                 {
                     response = BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
                 }
+                else
+                {
+                    var newUser = new Users(user.Username, user.Password);
+                    db.Users.Add(newUser);
 
-                var newUser = new Users(user.Username, user.Password);
-                db.Users.Add(newUser);
+                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+                    var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                    db.Tokens.Add(dbToken);
 
-                var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
-                var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
-                db.Tokens.Add(dbToken);
+                    db.SaveChanges();
 
-                db.SaveChanges();
-
-                response = Ok(token);
+                    response = Ok(token);
+                }
             }
 
             return response;
