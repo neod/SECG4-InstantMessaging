@@ -1,3 +1,4 @@
+using instantMessagingServer.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,7 @@ namespace instantMessagingServer
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Config.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
