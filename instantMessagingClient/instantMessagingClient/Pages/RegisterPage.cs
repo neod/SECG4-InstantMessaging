@@ -35,9 +35,13 @@ namespace instantMessagingClient.Pages
                 Console.WriteLine();
 
                 response = rest.Inscription(username, password);
-                if (response.StatusCode != HttpStatusCode.OK)
+                if (!response.IsSuccessful)
                 {
                     ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        ConsoleHelpers.WriteRed(response.Content);
+                    }
                     continue;
                 }
                 var token = response.Content;

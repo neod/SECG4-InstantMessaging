@@ -13,7 +13,7 @@ namespace instantMessagingClient.Pages
             Title = "Home";
             TitleColor = ConsoleColor.Green;
             Body = "-----";
-            MenuItems.Add(new MenuItem("Friends list", () => Application.GoTo<FriendList>()));
+            MenuItems.Add(new MenuItem("Friends list", clickFriendsList));
             MenuItems.Add(new MenuItem("Delete account", deleteAccount)
             {
                 Color = ConsoleColor.Red
@@ -22,6 +22,13 @@ namespace instantMessagingClient.Pages
             {
                 Color = ConsoleColor.Yellow
             });
+        }
+
+        private void clickFriendsList()
+        {
+            /*Console.WriteLine("Session Token: " + Session.Token);
+            ConsoleHelpers.HitEnterToContinue();*/
+            Application.GoTo<FriendList>();
         }
 
         private void deleteAccount()

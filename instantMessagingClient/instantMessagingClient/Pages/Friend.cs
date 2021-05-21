@@ -17,7 +17,10 @@ namespace instantMessagingClient.Pages
             TitleColor = ConsoleColor.Green;
             Body = "-----";
             MenuItems.Add(new MenuItem("Message", () => Application.GoTo<MessageFriend>(_ID)));
-            MenuItems.Add(new MenuItem("Delete from friendlist", DeleteFriend){ Color = ConsoleColor.Red });
+            MenuItems.Add(new MenuItem("Delete from friendlist", DeleteFriend)
+            {
+                Color = ConsoleColor.Red
+            });
             MenuItems.Add(new MenuItem("Go back", Application.GoBack)
             {
                 Color = ConsoleColor.Yellow
