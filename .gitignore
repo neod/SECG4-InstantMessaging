@@ -414,6 +414,11 @@ ServiceFabricBackup/
 # SQL Server files
 *.ndf
 
+# SQLite files
+.db
+.db-shm
+.db-wal
+
 # Business Intelligence projects
 *.rptproj.rsuser
 *- [Bb]ackup.rdl
