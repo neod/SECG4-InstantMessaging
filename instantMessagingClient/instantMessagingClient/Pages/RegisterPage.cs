@@ -15,7 +15,6 @@ namespace instantMessagingClient.Pages
             ConsoleHelpers.Write(ConsoleColor.Yellow, "Register");
             ConsoleHelpers.Write(ConsoleColor.White, "-----");
 
-            string token = "";
             Rest rest = new Rest();
             IRestResponse response;
 
@@ -41,7 +40,8 @@ namespace instantMessagingClient.Pages
                     ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
                     continue;
                 }
-                token = response.Content;
+                var token = response.Content;
+                Session.Token = token;
                 ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
             }
             while (response.StatusCode != HttpStatusCode.OK);

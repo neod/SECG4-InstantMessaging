@@ -26,5 +26,13 @@ namespace instantMessagingClient.Model
             request.AddJsonBody(param);
             return this.client.Put(this.request);
         }
+
+        public IRestResponse Login(string _username, SecureString _password)
+        {
+            this.request = new RestRequest("api/Users/Connexion", DataFormat.Json);
+            var param = new User(_username, _password);
+            request.AddJsonBody(param);
+            return this.client.Post(this.request);
+        }
     }
 }

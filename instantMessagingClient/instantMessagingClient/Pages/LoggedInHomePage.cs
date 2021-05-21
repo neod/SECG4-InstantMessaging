@@ -2,6 +2,7 @@
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Model;
 
 namespace instantMessagingClient.Pages
 {
