@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace instantMessagingServer.Controllers
 {
@@ -36,24 +37,26 @@ namespace instantMessagingServer.Controllers
                 var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
                 if (selectedUser != null)
                 {
-                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
+                    var IDToken = Guid.NewGuid().ToString();
+                    var token = JWTTokens.Generate(selectedUser.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
 
                     var dbToken = db.Tokens.FirstOrDefault(t => t.UserId == selectedUser.Id);
+                    var ExpirationDate = DateTime.Now.AddMinutes(Int32.Parse(Configuration["Jwt:Duration"]));
                     if (dbToken == null)
                     {
-                        dbToken = new Tokens(selectedUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                        dbToken = new Tokens(selectedUser.Id, IDToken, ExpirationDate);
                         db.Tokens.Add(dbToken);
                     }
                     else
                     {
-                        dbToken.Token = token;
-                        dbToken.ExpirationDate = DateTime.Now.AddMinutes(JWTTokens.duration);
+                        dbToken.Token = IDToken;
+                        dbToken.ExpirationDate = ExpirationDate;
                         db.Tokens.Update(dbToken);
                     }
 
                     db.SaveChanges();
 
-                    response = Ok(new { token });
+                    response = Ok(new Tokens(selectedUser.Id, token, ExpirationDate));
                 }
             }
             return response;
@@ -83,13 +86,15 @@ namespace instantMessagingServer.Controllers
                     var newUser = new Users(user.Username, user.Password);
                     db.Users.Add(newUser);
 
-                    var token = JWTTokens.Generate(Configuration["Jwt:Key"], Configuration["Jwt:Issuer"]);
-                    var dbToken = new Tokens(newUser.Id, token, DateTime.Now.AddMinutes(JWTTokens.duration));
+                    var IDToken = Guid.NewGuid().ToString();
+                    var token = JWTTokens.Generate(user.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
+                    var ExpirationDate = DateTime.Now.AddMinutes(Int32.Parse(Configuration["Jwt:Duration"]));
+                    var dbToken = new Tokens(newUser.Id, IDToken, ExpirationDate);
                     db.Tokens.Add(dbToken);
 
                     db.SaveChanges();
 
-                    response = Ok(token);
+                    response = Ok(new Tokens(newUser.Id, token, ExpirationDate));
                 }
             }
             return response;
