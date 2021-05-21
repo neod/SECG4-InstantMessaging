@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using RestSharp;
 
 namespace instantMessagingClient.Model
@@ -18,12 +14,25 @@ namespace instantMessagingClient.Model
             this.client = new RestClient("https://localhost:44307");
         }
 
+        public Rest(string baseUrl)
+        {
+            this.client = new RestClient(baseUrl);
+        }
+
         public IRestResponse Inscription(string _username, SecureString _password)
         {
             this.request = new RestRequest("api/Users/Inscription", DataFormat.Json);
             var param = new User(_username, _password);
             request.AddJsonBody(param);
             return this.client.Put(this.request);
+        }
+
+        public IRestResponse Login(string _username, SecureString _password)
+        {
+            this.request = new RestRequest("api/Users/Connexion", DataFormat.Json);
+            var param = new User(_username, _password);
+            request.AddJsonBody(param);
+            return this.client.Post(this.request);
         }
     }
 }
