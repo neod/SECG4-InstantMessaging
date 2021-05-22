@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace instantMessagingClient.Pages
@@ -41,9 +43,10 @@ namespace instantMessagingClient.Pages
                     ConsoleHelpers.WriteRed("There was an error, make sure you registered or that your name and password are correct.");
                     continue;
                 }
-                var token = response.Content;
-                Session.Token = token;
-                ConsoleHelpers.Write(ConsoleColor.White, "Successfully logged in " + username + "!");
+                var responseContent = response.Content;
+                Response deserializeObject = JsonConvert.DeserializeObject<Response>(responseContent);
+                Session.info = deserializeObject;
+                ConsoleHelpers.WriteGreen("Successfully logged in " + username + "!");
                 Console.WriteLine();
             }
             while (response.StatusCode != HttpStatusCode.OK);

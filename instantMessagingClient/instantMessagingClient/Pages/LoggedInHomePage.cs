@@ -26,7 +26,7 @@ namespace instantMessagingClient.Pages
 
         private void clickFriendsList()
         {
-            /*Console.WriteLine("Session Token: " + Session.Token);
+            /*Console.WriteLine("Session token: " + Session.token);
             ConsoleHelpers.HitEnterToContinue();*/
             Application.GoTo<FriendList>();
         }

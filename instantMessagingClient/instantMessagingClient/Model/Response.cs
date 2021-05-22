@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace instantMessagingClient.Model
 {
-    public static class Session
+    public class Response
     {
-        public static Response info { get; set; }
+        public int userId { get; set; }
+
+        public string token { get; set; }
+
+        public DateTime expirationDate { get; set; }
     }
 }
