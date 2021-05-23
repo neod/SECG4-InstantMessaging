@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace instantMessagingServer.Controllers
 {
@@ -34,7 +35,7 @@ namespace instantMessagingServer.Controllers
             if (ModelState.IsValid)
             {
                 DatabaseContext db = new(Configuration);
-                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == sha256_hash(user.Password));
                 if (selectedUser != null)
                 {
                     var IDToken = Guid.NewGuid().ToString();
@@ -83,7 +84,7 @@ namespace instantMessagingServer.Controllers
                 }
                 else
                 {
-                    var newUser = new Users(user.Username, user.Password);
+                    var newUser = new Users(user.Username, sha256_hash(user.Password));
                     db.Users.Add(newUser);
 
                     var IDToken = Guid.NewGuid().ToString();
@@ -109,6 +110,38 @@ namespace instantMessagingServer.Controllers
         public void Delete(int id)
         {
             //TODO: implémenter la suppresion d'un utilisateur(uniquement par lui meme)
+        }
+
+        public static string sha256_hash(string value)
+        {
+            value += CreateSalt(value);
+            StringBuilder Sb = new StringBuilder();
+
+            using SHA256 hash = SHA256.Create();
+            Encoding enc = Encoding.UTF8;
+            byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+            foreach (byte b in result)
+                Sb.Append(b.ToString("x2"));
+
+            return Sb.ToString();
+        }
+
+        private static string CreateSalt(string UserName)
+        {
+            string username = UserName;
+            var userBytes = Encoding.ASCII.GetBytes(username);
+            long XORED = 0x00;
+
+            foreach (int x in userBytes)
+                XORED = XORED ^ x;
+
+            Random rand = new Random(Convert.ToInt32(XORED));
+            var salt = rand.Next().ToString();
+            salt += rand.Next().ToString();
+            salt += rand.Next().ToString();
+            salt += rand.Next().ToString();
+            return salt;
         }
     }
 }
