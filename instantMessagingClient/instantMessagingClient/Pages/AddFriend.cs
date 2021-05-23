@@ -9,12 +9,17 @@ namespace instantMessagingClient.Pages
         public AddFriend()
         {
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
-            string Name = ConsoleHelpers.Readline(ConsoleColor.White, "name: ");
-            if (Name == "/back")
+            string Name;
+            bool nameExists = false;
+            do
             {
-                Application.GoTo<FriendList>();
-            }
-            //do while name exists puis go back to LoggedInHomePage (psk le goback va pas fonctionner si on se mets sur friendlist)
+                Name = ConsoleHelpers.Readline(ConsoleColor.White, "name: ");
+                nameExists = true;//faire appel API
+            } while (Name != "/back" && !nameExists);
+
+            //ajouter l'ami si existant
+
+            Application.GoTo<FriendList>();
         }
     }
 }

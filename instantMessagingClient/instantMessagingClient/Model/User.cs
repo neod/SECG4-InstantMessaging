@@ -6,6 +6,7 @@ namespace instantMessagingClient.Model
 {
     internal class User
     {
+        //utilisé dans rest.cs
         private string _username;
         private SecureString _password;
 

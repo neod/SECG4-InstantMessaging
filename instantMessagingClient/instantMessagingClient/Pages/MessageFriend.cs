@@ -13,12 +13,14 @@ namespace instantMessagingClient.Pages
             _ID = ID;
             Console.Clear();
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
-            string text = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
-            if (text == "/back")
+            string text;
+            do
             {
-                Application.GoTo<FriendList>();
-            }
-            // /exit pour goback??
+                text = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
+                //send text to server
+            } while (text != "/back");
+            //Application.GoTo<FriendList>();
+            Application.GoBack();
         }
     }
 }
