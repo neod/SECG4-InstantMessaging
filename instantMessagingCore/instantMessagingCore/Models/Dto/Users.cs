@@ -26,6 +26,11 @@ namespace instantMessagingCore.Models.Dto
         public string Password { get; set; }
 
         /// <summary>
+        /// The password salt used
+        /// </summary>
+        public string Salt { get; set; }
+
+        /// <summary>
         /// The password expiration date
         /// </summary>
         public DateTime ExpirtationDate { get; set; }
@@ -35,18 +40,20 @@ namespace instantMessagingCore.Models.Dto
             ExpirtationDate = DateTime.Now;
         }
 
-        public Users(string username, string password)
+        public Users(string username, string password, string salt)
         {
             Username = username ?? throw new ArgumentNullException(nameof(username));
             Password = password ?? throw new ArgumentNullException(nameof(password));
+            Salt = salt ?? throw new ArgumentNullException(nameof(salt));
             ExpirtationDate = DateTime.Now;
         }
         
-        public Users(int id, string username, string password)
+        public Users(int id, string username, string password, string salt)
         {
             Id = id;
             Username = username ?? throw new ArgumentNullException(nameof(username));
             Password = password ?? throw new ArgumentNullException(nameof(password));
+            Salt = salt ?? throw new ArgumentNullException(nameof(salt));
             ExpirtationDate = DateTime.Now;
         }
     }

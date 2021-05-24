@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using instantMessagingServer.Models;
 
 namespace instantMessagingServer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseModelSnapshot : ModelSnapshot
+    [Migration("20210524214034_add_Users_SaltProperty")]
+    partial class add_Users_SaltProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
