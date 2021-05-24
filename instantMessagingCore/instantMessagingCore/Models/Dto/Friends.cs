@@ -17,10 +17,27 @@ namespace instantMessagingCore.Models.Dto
         /// </summary>
         public int FriendId { get; set; }
 
+        public RequestStatus Status { get; set; }
+
         public Friends(int userId, int friendId)
         {
             UserId = userId;
             FriendId = friendId;
+            Status = RequestStatus.waiting;
+        }
+
+        public enum RequestStatus
+        {
+            waiting,
+            accepted,
+            blocked
+        }
+
+        public enum Action
+        {
+            accept,
+            refuse,
+            block
         }
     }
 }
