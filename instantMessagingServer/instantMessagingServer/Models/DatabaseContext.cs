@@ -41,7 +41,7 @@ namespace instantMessagingServer.Models
 
             modelBuilder.Entity<Logs>().HasKey(l => l.Id);
 
-            modelBuilder.Entity<Friends>().HasKey(f => f.UserId);
+            modelBuilder.Entity<Friends>().HasKey(f => new { f.UserId, f.FriendId });
 
             modelBuilder.Entity<Peers>().HasKey(p => p.UserId);
         }

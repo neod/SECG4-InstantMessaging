@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using instantMessagingServer.Models;
 
 namespace instantMessagingServer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseModelSnapshot : ModelSnapshot
+    [Migration("20210524173612_add_Friends_requestStatus")]
+    partial class add_Friends_requestStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
