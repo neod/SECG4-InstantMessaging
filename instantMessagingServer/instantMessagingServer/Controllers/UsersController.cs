@@ -38,7 +38,7 @@ namespace instantMessagingServer.Controllers
                 var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == sha256_hash(user.Password));
                 if (selectedUser != null)
                 {
-                    var IDToken = Guid.NewGuid().ToString();
+                    var IDToken = Authentication.GetInstance().GetIDToken();
                     var token = JWTTokens.Generate(selectedUser.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
 
                     var dbToken = db.Tokens.FirstOrDefault(t => t.UserId == selectedUser.Id);
@@ -87,7 +87,7 @@ namespace instantMessagingServer.Controllers
                     var newUser = new Users(user.Username, sha256_hash(user.Password));
                     db.Users.Add(newUser);
 
-                    var IDToken = Guid.NewGuid().ToString();
+                    var IDToken = Authentication.GetInstance().GetIDToken();
                     var token = JWTTokens.Generate(user.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
                     var ExpirationDate = DateTime.Now.AddMinutes(Int32.Parse(Configuration["Jwt:Duration"]));
                     var dbToken = new Tokens(newUser.Id, IDToken, ExpirationDate);
