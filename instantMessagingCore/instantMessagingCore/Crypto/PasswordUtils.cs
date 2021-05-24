@@ -10,7 +10,7 @@ namespace instantMessagingCore.Crypto
     public class PasswordUtils
     {
         private const int hashIteration = 100_000;
-        private static ASCIIEncoding encoding = new ASCIIEncoding();
+        private static UTF8Encoding encoding = new UTF8Encoding();
 
         public static string hashAndSalt(string password, string salt)
         {
