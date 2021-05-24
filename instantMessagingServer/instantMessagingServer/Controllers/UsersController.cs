@@ -34,6 +34,8 @@ namespace instantMessagingServer.Controllers
 
             if (ModelState.IsValid)
             {
+                user.Username = user.Username.ToLower();
+
                 DatabaseContext db = new(Configuration);
                 var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == sha256_hash(user.Password));
                 if (selectedUser != null)
@@ -76,6 +78,8 @@ namespace instantMessagingServer.Controllers
 
             if (ModelState.IsValid)
             {
+                user.Username = user.Username.ToLower();
+
                 DatabaseContext db = new(Configuration);
 
                 if (db.Users.Any(u => u.Username == user.Username))
