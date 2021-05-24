@@ -28,6 +28,7 @@ namespace instantMessagingCore.Models.Dto
         /// <summary>
         /// The password salt used
         /// </summary>
+        [Required(ErrorMessage = "Salt is required")]
         public string Salt { get; set; }
 
         /// <summary>
