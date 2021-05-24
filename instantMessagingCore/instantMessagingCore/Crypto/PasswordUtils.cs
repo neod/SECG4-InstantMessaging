@@ -9,19 +9,9 @@ namespace instantMessagingCore.Crypto
 {
     public class PasswordUtils
     {
-        private const int hashIteration = 100_000;
         private static UTF8Encoding encoding = new UTF8Encoding();
 
-        public static string hashAndSalt(string password, string salt)
-        {
-            password += salt;
-            for (int i = 0; i < hashIteration; i++)
-            {
-                password = sha256(password);
-            }
-
-            return password;
-        }
+        public static string hashAndSalt(string password, string salt) => sha256(password + salt);
 
         public static string sha256(string value)
         {
