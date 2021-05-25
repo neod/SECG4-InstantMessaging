@@ -6,6 +6,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using EasyConsoleApplication;
+using instantMessagingClient.Pages;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
 using RestSharp;
@@ -27,7 +28,7 @@ namespace instantMessagingClient.Model
             this.client = new RestClient(baseUrl);
         }
 
-        private bool isConnectionStillValid()
+        private static bool isTokenDateValid()
         {
             bool Answer = true;
             int res = DateTime.Compare(Session.tokens.ExpirationDate, DateTime.Now);
@@ -39,27 +40,43 @@ namespace instantMessagingClient.Model
             return Answer;
         }
 
-        public bool checkConnection()
+        private static bool updateToken()
         {
             bool connected = true;
-            if (!isConnectionStillValid())
+            if (!isTokenDateValid())
             {
                 Rest rest = new Rest();
                 var response = rest.Login(Session.sessionUsername, Session.sessionPassword);
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response != null)
                 {
-                    var responseContent = response.Content;
-                    Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
-                    Session.tokens = deserializeObject;
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var responseContent = response.Content;
+                        Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
+                        Session.tokens = deserializeObject;
+                    }
+                    else
+                    {
+                        Session.tokens = null;
+                        connected = false;
+                    }
                 }
                 else
                 {
-                    Session.tokens = null;
                     connected = false;
                 }
             }
 
             return connected;
+        }
+
+        private static bool isValid()
+        {
+            if (updateToken()) return true;
+            ConsoleHelpers.WriteRed("Invalid token. You will be disconnected.");
+            ConsoleHelpers.HitEnterToContinue();
+            LoggedInHomePage.clickDisconnect();
+            return false;
         }
 
         public IRestResponse Inscription(string _username, SecureString _password)
@@ -80,33 +97,57 @@ namespace instantMessagingClient.Model
 
         public IRestResponse getMyFriendList()
         {
-            this.request = new RestRequest("/api/Friends", Method.GET);
-            request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
-            return this.client.Get(this.request);
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("/api/Friends", Method.GET);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
         }
 
         public IRestResponse getFriendRequests()
         {
-            this.request = new RestRequest("api/Friends/pendingrequest", Method.GET);
-            request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
-            return this.client.Get(this.request);
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("api/Friends/pendingrequest", Method.GET);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
         }
 
         public IRestResponse SendFriendRequest(string FriendName)
         {
-            this.request = new RestRequest("api/Friends/request/{friendName}", Method.GET);
-            request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
-            request.AddUrlSegment("friendName", FriendName);
-            return this.client.Get(this.request);
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("api/Friends/request/{friendName}", Method.GET);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                request.AddUrlSegment("friendName", FriendName);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
         }
 
         public IRestResponse ActionFriendRequest(Friends.Action requestAction, int _ID)
         {
-            this.request = new RestRequest("api/Friends/pendingrequest/{senderId}/{requestAction}", Method.GET);
-            request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
-            request.AddUrlSegment("senderId", _ID);
-            request.AddUrlSegment("requestAction", requestAction);
-            return this.client.Get(this.request);
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("api/Friends/pendingrequest/{senderId}/{requestAction}", Method.GET);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                request.AddUrlSegment("senderId", _ID);
+                request.AddUrlSegment("requestAction", requestAction);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
         }
     }
 }

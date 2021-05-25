@@ -9,7 +9,7 @@ namespace instantMessagingClient.Pages
     public class AddFriend : Page
     {
         public AddFriend()
-        {
+        {//TODO: check si deja une requete, si l'ami ta ajouté que toi tu l'ajoute pas
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
             const string backCommand = "/back";
             string Name;
@@ -24,12 +24,23 @@ namespace instantMessagingClient.Pages
                     continue;
                 }
                 IRestResponse rep = rest.SendFriendRequest(Name);
-                nameExists = rep.IsSuccessful;
-                if (nameExists)
+                if (rep != null)
                 {
-                    ConsoleHelpers.WriteGreen("Successfully added " + Name);
-                    ConsoleHelpers.HitEnterToContinue();
-                }//todo: else
+                    nameExists = rep.IsSuccessful;
+                    if (nameExists)
+                    {
+                        ConsoleHelpers.WriteGreen("Successfully added " + Name);
+                        ConsoleHelpers.HitEnterToContinue();
+                    }
+                    else
+                    {
+                        ConsoleHelpers.WriteRed(Name + " doesn't exist.");
+                    }
+                }
+                else
+                {
+                    nameExists = false;
+                }
             } while (Name != backCommand && !nameExists);
 
             Application.GoTo<FriendList>();

@@ -29,36 +29,49 @@ namespace instantMessagingClient.Pages
         {
             Rest rest = new Rest();
             var reply = rest.ActionFriendRequest(Friends.Action.accept, _ID);
-            if (reply.IsSuccessful)
+            if (reply != null)
             {
-                ConsoleHelpers.WriteGreen("Successfully added UserId" + _ID);
-                ConsoleHelpers.HitEnterToContinue();
+                if (reply.IsSuccessful)
+                {
+                    ConsoleHelpers.WriteGreen("Successfully added UserId" + _ID);
+                    ConsoleHelpers.HitEnterToContinue();
+                }
+                else
+                {
+                    ConsoleHelpers.WriteRed("Error while adding friend :(");
+                    Console.WriteLine(reply.Content);
+                    ConsoleHelpers.HitEnterToContinue();
+                }
             }
             else
             {
                 ConsoleHelpers.WriteRed("Error while adding friend :(");
-                Console.WriteLine(reply.Content);
                 ConsoleHelpers.HitEnterToContinue();
             }
+
             Application.GoTo<FriendList>();
         }
 
         private static void Decline()
         {
             ConsoleKeyInfo yesOrNo = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?");
+            Console.WriteLine();
             if (yesOrNo.Key == ConsoleKey.Y)
             {
                 Rest rest = new Rest();
                 var reply = rest.ActionFriendRequest(Friends.Action.refuse, _ID);
-                if (reply.IsSuccessful)
+                if (reply != null)
                 {
-                    ConsoleHelpers.WriteGreen("Successfully declined UserId" + _ID);
-                    ConsoleHelpers.HitEnterToContinue();
-                }
-                else
-                {
-                    ConsoleHelpers.WriteRed("Error while declining request.");
-                    ConsoleHelpers.HitEnterToContinue();
+                    if (reply.IsSuccessful)
+                    {
+                        ConsoleHelpers.WriteGreen("Successfully declined UserId" + _ID);
+                        ConsoleHelpers.HitEnterToContinue();
+                    }
+                    else
+                    {
+                        ConsoleHelpers.WriteRed("Error while declining request.");
+                        ConsoleHelpers.HitEnterToContinue();
+                    }
                 }
                 Application.GoTo<FriendList>();
             }

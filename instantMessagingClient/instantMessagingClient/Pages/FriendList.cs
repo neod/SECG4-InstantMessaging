@@ -12,7 +12,7 @@ namespace instantMessagingClient.Pages
     {
         public FriendList()
         {
-            Title = "Friend list";
+            Title = Session.sessionUsername + "(" + Session.tokens.UserId + ")'" + "Friends list";
             TitleColor = ConsoleColor.Green;
             Body = "-----";
             PrintFriendsAndNotifications();
@@ -29,37 +29,40 @@ namespace instantMessagingClient.Pages
             Rest rest = new Rest();
 
             //for amis
-            /*if (!rest.checkConnection())
-            {
-                ConsoleHelpers.WriteRed("Invalid token.");
-            }*/
             var reponseMyFriends = rest.getMyFriendList();
-            if (reponseMyFriends.IsSuccessful)
+            if (reponseMyFriends != null)
             {
-                Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseMyFriends.Content);
-                if (FriendList != null)
+                if (reponseMyFriends.IsSuccessful)
                 {
-                    foreach (Friends friend in FriendList)
+                    Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseMyFriends.Content);
+                    if (FriendList != null)
                     {
-                        MenuItems.Add(new MenuItem("Friend" + friend.UserId, () => Application.GoTo<Friend>(friend.UserId)));
+                        foreach (Friends friend in FriendList)
+                        {
+                            var friendUserId = friend.UserId == Session.tokens.UserId ? friend.FriendId : friend.UserId;
+                            MenuItems.Add(new MenuItem("Friend" + friendUserId, () => Application.GoTo<Friend>(friendUserId)));
+                        }
                     }
                 }
             }
             
             //for notif
             var reponseFriendRequests = rest.getFriendRequests();
-            if (reponseFriendRequests.IsSuccessful)
+            if (reponseFriendRequests != null)
             {
-                Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseFriendRequests.Content);
-                if (FriendList != null)
+                if (reponseFriendRequests.IsSuccessful)
                 {
-                    foreach (Friends friend in FriendList)
+                    Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseFriendRequests.Content);
+                    if (FriendList != null)
                     {
-                        MenuItems.Add(new MenuItem("UserId: " + friend.UserId + " wants to add you.",
-                            () => Application.GoTo<Notification>(friend.UserId))
+                        foreach (Friends friend in FriendList)
                         {
-                            Color = ConsoleColor.Green
-                        });
+                            MenuItems.Add(new MenuItem("UserId: " + friend.UserId + " wants to add you.",
+                                () => Application.GoTo<Notification>(friend.UserId))
+                            {
+                                Color = ConsoleColor.Green
+                            });
+                        }
                     }
                 }
             }

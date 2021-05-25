@@ -37,20 +37,7 @@ namespace instantMessagingClient
         private static void Main(string[] args)
         {
             ConsoleSettings.DefaultColor = ConsoleColor.White;
-
-            Menu mainMenu = new Menu("Instant messaging client");
-            mainMenu.Items.Add(new MenuItem("Login", () => Application.GoTo<LoginPage>())
-            {
-                Color = ConsoleColor.Green
-            });
-            mainMenu.Items.Add(new MenuItem("Register", () => Application.GoTo<RegisterPage>())
-            {
-                Color = ConsoleColor.Yellow
-            });
-            mainMenu.Items.Add(Separator.Instance);
-            mainMenu.Items.Add(new MenuItem("Quit", Application.Exit));
-
-            Application.Render(mainMenu);
+            Application.GoTo<Home>();
         }
     }
 }

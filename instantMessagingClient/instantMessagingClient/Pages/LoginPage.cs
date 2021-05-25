@@ -42,7 +42,13 @@ namespace instantMessagingClient.Pages
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ConsoleHelpers.WriteRed("There was an error, make sure you registered or that your name and password are correct.");
-                    continue;
+                    var key = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Yellow, "Go back to the home page?");
+                    Console.WriteLine();
+                    if (key.Key == ConsoleKey.N)
+                    {
+                        continue;
+                    }
+                    Application.GoTo<Home>();
                 }
                 var responseContent = response.Content;
                 Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
