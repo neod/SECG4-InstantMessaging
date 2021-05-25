@@ -47,6 +47,8 @@ namespace instantMessagingClient.Pages
                 var responseContent = response.Content;
                 Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
                 Session.tokens = deserializeObject;
+                Session.sessionPassword = password;
+                Session.sessionUsername = username;
                 ConsoleHelpers.WriteGreen("Successfully logged in " + username + "!");
                 Console.WriteLine();
             }

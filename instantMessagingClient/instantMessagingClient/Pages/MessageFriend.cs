@@ -11,7 +11,7 @@ namespace instantMessagingClient.Pages
 {
     public class MessageFriend : Page
     {
-        private readonly int _ID;
+        private static int _ID;
 
         public MessageFriend(int ID)
         {
@@ -33,8 +33,10 @@ namespace instantMessagingClient.Pages
             
             //Peers peer = new Peers(Session.tokens.userId, );
             //nous sommes A, nous avons la clé publique de B
-            RSAManager clefPriveDeA = new RSAManager(new RSAManager().GetKey(true));//A
-            RSAManager clefPublicDeB = new RSAManager(new RSAManager().GetKey(false));//B
+            RSAManager rsaA = new RSAManager();
+            string publicKeyA = rsaA.GetKey(false);//pour que B reponde il a besoin de ca
+            RSAManager rsaB = new RSAManager(new RSAManager().GetKey(false));//B
+            string publicKeyB = rsaB.GetKey(false);
 
             if (clientSocket.Connected)
             {
@@ -45,7 +47,12 @@ namespace instantMessagingClient.Pages
                     if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
                     
                     byte[] text = Encoding.ASCII.GetBytes(rawString);
-                    text = clefPublicDeB.Encrypt(text);
+                    RSAManager rsaClientB = new RSAManager(publicKeyB);
+                    text = rsaClientB.Encrypt(text);
+
+
+                    //dans clientB:
+
                 } while (rawString != backCommand);
             }
             //Application.GoTo<FriendList>();

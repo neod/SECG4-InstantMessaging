@@ -5,7 +5,9 @@ using System.Net;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using EasyConsoleApplication;
 using instantMessagingCore.Models.Dto;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace instantMessagingClient.Model
@@ -37,13 +39,28 @@ namespace instantMessagingClient.Model
             return Answer;
         }
 
-        /*private bool makeNewConnection()
+        public bool checkConnection()
         {
-            if (!this.isConnectionStillValid())
+            bool connected = true;
+            if (!isConnectionStillValid())
             {
-                //stocker login qlque part dabord puis refaire connection
+                Rest rest = new Rest();
+                var response = rest.Login(Session.sessionUsername, Session.sessionPassword);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseContent = response.Content;
+                    Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
+                    Session.tokens = deserializeObject;
+                }
+                else
+                {
+                    Session.tokens = null;
+                    connected = false;
+                }
             }
-        }*/
+
+            return connected;
+        }
 
         public IRestResponse Inscription(string _username, SecureString _password)
         {

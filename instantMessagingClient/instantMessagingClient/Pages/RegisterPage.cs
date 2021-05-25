@@ -46,7 +46,7 @@ namespace instantMessagingClient.Pages
                     }
                     continue;
                 }
-                ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
+                ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
             }
             while (response.StatusCode != HttpStatusCode.OK);
 

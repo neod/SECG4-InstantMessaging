@@ -10,7 +10,7 @@ namespace instantMessagingClient.Pages
     {
         public LoggedInHomePage()
         {
-            Title = "Home";
+            Title = "Home: " + Session.sessionUsername;
             TitleColor = ConsoleColor.Green;
             Body = "-----";
             MenuItems.Add(new MenuItem("Friends list", clickFriendsList));
@@ -18,7 +18,7 @@ namespace instantMessagingClient.Pages
             {
                 Color = ConsoleColor.Red
             });
-            MenuItems.Add(new MenuItem("Disconnect", Application.Exit)
+            MenuItems.Add(new MenuItem("Disconnect", clickDisconnect)
             {
                 Color = ConsoleColor.Yellow
             });
@@ -29,6 +29,14 @@ namespace instantMessagingClient.Pages
             /*Console.WriteLine("Session token: " + Session.token);
             ConsoleHelpers.HitEnterToContinue();*/
             Application.GoTo<FriendList>();
+        }
+
+        private void clickDisconnect()
+        {
+            Session.sessionPassword = null;
+            Session.sessionUsername = null;
+            Session.tokens = null;
+            Application.GoTo<LoginPage>();
         }
 
         private void deleteAccount()

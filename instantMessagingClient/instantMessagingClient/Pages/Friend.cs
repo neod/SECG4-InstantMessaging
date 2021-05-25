@@ -2,12 +2,14 @@
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Model;
+using instantMessagingCore.Models.Dto;
 
 namespace instantMessagingClient.Pages
 {
     public class Friend : Page
     {
-        private readonly int _ID;
+        private static int _ID;
 
         public Friend(int ID)
         {
@@ -32,7 +34,8 @@ namespace instantMessagingClient.Pages
             ConsoleKeyInfo yesOrNo = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?");
             if (yesOrNo.Key == ConsoleKey.Y)
             {
-                //delete friend and go to friendlist
+                Rest rest = new Rest();
+                var reply = rest.ActionFriendRequest(Friends.Action.refuse, _ID);
                 Application.GoTo<FriendList>();
             }
         }

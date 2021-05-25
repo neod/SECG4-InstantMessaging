@@ -29,6 +29,10 @@ namespace instantMessagingClient.Pages
             Rest rest = new Rest();
 
             //for amis
+            /*if (!rest.checkConnection())
+            {
+                ConsoleHelpers.WriteRed("Invalid token.");
+            }*/
             var reponseMyFriends = rest.getMyFriendList();
             if (reponseMyFriends.IsSuccessful)
             {

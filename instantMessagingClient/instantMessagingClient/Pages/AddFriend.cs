@@ -29,7 +29,7 @@ namespace instantMessagingClient.Pages
                 {
                     ConsoleHelpers.WriteGreen("Successfully added " + Name);
                     ConsoleHelpers.HitEnterToContinue();
-                }
+                }//todo: else
             } while (Name != backCommand && !nameExists);
 
             Application.GoTo<FriendList>();
