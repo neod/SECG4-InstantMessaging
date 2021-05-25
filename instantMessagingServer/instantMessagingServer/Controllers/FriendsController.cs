@@ -32,7 +32,7 @@ namespace instantMessagingServer.Controllers
         /// <returns>the friends list</returns>
         // GET: api/<FriendsController>/
         [HttpGet]
-        public IActionResult GetFrienList()
+        public IActionResult GetFriendList()
         {
             IActionResult response = Unauthorized();
 
@@ -43,7 +43,7 @@ namespace instantMessagingServer.Controllers
 
                 var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
 
-                response = Ok(db.Friends.Where(f => f.UserId == currentUser.Id && f.Status == Friends.RequestStatus.accepted));
+                response = Ok(db.Friends.Where(f => (f.UserId == currentUser.Id || f.FriendId == currentUser.Id) && f.Status == Friends.RequestStatus.accepted));
 
             }
 
