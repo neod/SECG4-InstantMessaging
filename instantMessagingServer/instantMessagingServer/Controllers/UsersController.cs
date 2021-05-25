@@ -38,7 +38,7 @@ namespace instantMessagingServer.Controllers
                 user.Username = user.Username.ToLower();
 
                 DatabaseContext db = new(Configuration);
-                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == PasswordUtils.hashAndSalt(user.Password, u.Salt));
+                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == u.Password);
                 if (selectedUser != null)
                 {
                     var IDToken = Authentication.GetInstance().GetIDToken();

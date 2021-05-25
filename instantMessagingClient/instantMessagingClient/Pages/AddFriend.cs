@@ -11,17 +11,26 @@ namespace instantMessagingClient.Pages
         public AddFriend()
         {
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
+            const string backCommand = "/back";
             string Name;
             bool nameExists;
             Rest rest = new Rest();
             do
             {
                 Name = ConsoleHelpers.Readline(ConsoleColor.White, "name: ");
+                if (Name == backCommand)
+                {
+                    nameExists = true;
+                    continue;
+                }
                 IRestResponse rep = rest.SendFriendRequest(Name);
                 nameExists = rep.IsSuccessful;
-            } while (Name != "/back" && !nameExists);
-
-            //ajouter l'ami si existant
+                if (nameExists)
+                {
+                    ConsoleHelpers.WriteGreen("Successfully added " + Name);
+                    ConsoleHelpers.HitEnterToContinue();
+                }
+            } while (Name != backCommand && !nameExists);
 
             Application.GoTo<FriendList>();
         }

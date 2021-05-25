@@ -134,7 +134,7 @@ namespace instantMessagingServer.Controllers
             IActionResult response = Unauthorized();
 
             var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
-            if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
+            if (ClaimIDToken != null && authentication.isAutheticate(User.Identity?.Name, ClaimIDToken))
             {
                 DatabaseContext db = new(Configuration);
 
@@ -162,6 +162,5 @@ namespace instantMessagingServer.Controllers
 
             return response;
         }
-
     }
 }
