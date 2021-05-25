@@ -47,7 +47,7 @@ namespace instantMessagingClient.Pages
                 }
                 var responseContent = response.Content;
                 Response deserializeObject = JsonConvert.DeserializeObject<Response>(responseContent);
-                Session.info = deserializeObject;
+                Session.tokens = deserializeObject;
                 ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
             }
             while (response.StatusCode != HttpStatusCode.OK);
