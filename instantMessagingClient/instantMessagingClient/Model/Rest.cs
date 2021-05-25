@@ -38,5 +38,12 @@ namespace instantMessagingClient.Model
             request.AddJsonBody(param);
             return this.client.Post(this.request);
         }
+
+        public IRestResponse SendFriendRequest(string FriendName)
+        {
+            this.request = new RestRequest("api/Friends/request/", DataFormat.Json);
+            request.AddJsonBody(FriendName);
+            return this.client.Get(this.request);
+        }
     }
 }

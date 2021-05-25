@@ -4,6 +4,7 @@ using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
+using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -45,9 +46,6 @@ namespace instantMessagingClient.Pages
                     }
                     continue;
                 }
-                var responseContent = response.Content;
-                Response deserializeObject = JsonConvert.DeserializeObject<Response>(responseContent);
-                Session.tokens = deserializeObject;
                 ConsoleHelpers.Write(ConsoleColor.White, "Successfully registered " + username + "!");
             }
             while (response.StatusCode != HttpStatusCode.OK);

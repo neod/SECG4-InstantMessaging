@@ -1,6 +1,8 @@
 ﻿using System;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Model;
+using RestSharp;
 
 namespace instantMessagingClient.Pages
 {
@@ -10,11 +12,13 @@ namespace instantMessagingClient.Pages
         {
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
             string Name;
-            bool nameExists = false;
+            bool nameExists;
+            Rest rest = new Rest();
             do
             {
                 Name = ConsoleHelpers.Readline(ConsoleColor.White, "name: ");
-                nameExists = true;//faire appel API
+                IRestResponse rep = rest.SendFriendRequest(Name);
+                nameExists = rep.IsSuccessful;
             } while (Name != "/back" && !nameExists);
 
             //ajouter l'ami si existant
