@@ -3,6 +3,7 @@ using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
+using instantMessagingClient.P2P;
 
 namespace instantMessagingClient.Pages
 {
@@ -18,6 +19,9 @@ namespace instantMessagingClient.Pages
             {
                 Color = ConsoleColor.Yellow
             });
+
+            Session.communication = new TCP("127.0.0.1", "50000");
+            Session.communication.startListener();
         }
 
         private void clickFriendsList()
@@ -30,6 +34,8 @@ namespace instantMessagingClient.Pages
             Session.sessionPassword = null;
             Session.sessionUsername = null;
             Session.tokens = null;
+            Session.communication = null;
+            Session.isOnMessagingPage = false;
             Application.GoTo<Home>();
         }
     }
