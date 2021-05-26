@@ -98,22 +98,24 @@ namespace instantMessagingServer.Controllers
 
                 var friend = db.Friends.FirstOrDefault(f => f.UserId == senderId && f.FriendId == currentUser.Id);
 
+                if (friend != null && requestAction == Friends.Action.accept)
+                {
+                    friend.Status = Friends.RequestStatus.accepted;
+                    db.Friends.Update(friend);
+                }
+                else if(requestAction == Friends.Action.refuse)
+                {
+                    friend ??= db.Friends.FirstOrDefault(f => f.UserId == currentUser.Id && f.FriendId == senderId);
+                    if(friend != null) db.Friends.Remove(friend);
+                }
+                else if(friend != null && requestAction == Friends.Action.block)
+                {
+                    friend.Status = Friends.RequestStatus.blocked;
+                    db.Friends.Update(friend);
+                }
+
                 if (friend != null)
                 {
-                    switch (requestAction)
-                    {
-                        case Friends.Action.accept:
-                            friend.Status = Friends.RequestStatus.accepted;
-                            db.Friends.Update(friend);
-                            break;
-                        case Friends.Action.refuse:
-                            db.Friends.Remove(friend);
-                            break;
-                        case Friends.Action.block:
-                            friend.Status = Friends.RequestStatus.blocked;
-                            db.Friends.Update(friend);
-                            break;
-                    }
                     db.SaveChanges();
                     response = Ok();
                 }
