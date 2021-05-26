@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using instantMessagingClient.Database;
-using SimpleTCP;
 
 namespace instantMessagingClient.Model
 {
@@ -44,7 +40,7 @@ namespace instantMessagingClient.Model
                 do
                 {
                     rawString = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
-                    myMessages msg = new myMessages(Session.tokens.UserId, rawString);
+                    MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
                     Session.communication.sendMessage(msg);
                     /*if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
                     byte[] text = Encoding.ASCII.GetBytes(rawString);*/
@@ -62,7 +58,7 @@ namespace instantMessagingClient.Model
             Console.SetCursorPosition(0, 0);
             ConsoleHelpers.WriteGreen("If you want to go back, type '" + backCommand + "'");
 
-            this.db.myMessages.ToList().ForEach(m => Console.WriteLine(m.message));
+            this.db.MyMessages.ToList().ForEach(m => Console.WriteLine(m.message));
         }
     }
 }

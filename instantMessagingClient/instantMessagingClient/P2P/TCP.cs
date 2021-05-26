@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using instantMessagingClient.Database;
 using instantMessagingClient.JsonRest;
-using instantMessagingClient.Model;
 using SimpleTCP;
 
 namespace instantMessagingClient.P2P
@@ -61,13 +57,13 @@ namespace instantMessagingClient.P2P
 
         private void Message_Received(object sender, Message e)
         {
-            myMessages dd = e.MessageString.Deserialize<myMessages>();
-            myMessages msg = new myMessages(dd.IdEnvoyeur, dd.message);
-            this.db.myMessages.Add(msg);//TODO BUG FIX
+            MyMessages dd = e.MessageString.Deserialize<MyMessages>();
+            MyMessages msg = new MyMessages(dd.IdEnvoyeur, dd.message);
+            this.db.MyMessages.Add(msg);//TODO BUG FIX
             this.db.SaveChanges();
         }
 
-        public void sendMessage(myMessages msg)
+        public void sendMessage(MyMessages msg)
         {
             string toSend = msg.Serialize();
             myClient.WriteAndGetReply(toSend);
