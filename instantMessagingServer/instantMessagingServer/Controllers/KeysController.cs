@@ -1,4 +1,5 @@
-﻿using instantMessagingServer.Models;
+﻿using instantMessagingCore.Models.Dto;
+using instantMessagingServer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,46 +27,80 @@ namespace instantMessagingServer.Controllers
             this.authentication = Authentication.GetInstance();
         }
 
-        // GET: api/<KeysController>
-        [HttpGet]
-        public IActionResult Get()
+        /// <summary>
+        /// Return the selected friend user public key
+        /// </summary>
+        /// <param name="friendId">friend id user</param>
+        /// <returns>the selecte public key</returns>
+        // GET api/<KeysController>/5
+        [HttpGet("{friendId}")]
+        public IActionResult Get(int friendId)
         {
             IActionResult response = Unauthorized();
 
-            DatabaseContext db = new(Configuration);
             var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
             if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
             {
-                 response = Ok(new string[] { "value1", "value2" });
+                DatabaseContext db = new(Configuration);
+                var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+
+                if (db.Friends.Any(f =>
+                     (f.UserId == currentUser.Id && f.FriendId == friendId) ||
+                     (f.UserId == friendId && f.FriendId == currentUser.Id)
+                ))
+                {
+                    var publicKey = db.PublicKeys.FirstOrDefault(pk => pk.UserId == friendId);
+                    if (publicKey != null)
+                    {
+                        response = Ok(publicKey);
+                    }
+                }
             }
 
             return response;
         }
 
-        // GET api/<KeysController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        /// <summary>
+        /// Registre the user public key
+        /// </summary>
+        /// <param name="pk">The public key to register</param>
+        /// <returns>the http status</returns>
         // POST api/<KeysController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] PublicKeys pk)
         {
+            IActionResult response = Unauthorized();
 
-        }
 
-        // PUT api/<KeysController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
+            if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
+            {
+                DatabaseContext db = new(Configuration);
+                var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
 
-        // DELETE api/<KeysController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                if (currentUser != null && pk.UserId == currentUser.Id)
+                {
+
+                    var dbpk = db.PublicKeys.FirstOrDefault(p => p.UserId == currentUser.Id);
+                    if (dbpk == null)
+                    {
+                        db.PublicKeys.Add(pk);
+                    }
+                    else
+                    {
+                        dbpk.Key = pk.Key;
+                        db.PublicKeys.Update(dbpk);
+                    }
+                    db.SaveChanges();
+                    response = Ok();
+                }
+                else
+                {
+                    response = BadRequest($"{nameof(ArgumentException)}: {nameof(PublicKeys)}  does not belong to {currentUser.Username}");
+                }
+            }
+
+            return response;
         }
     }
 }
