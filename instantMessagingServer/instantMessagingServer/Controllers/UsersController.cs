@@ -1,13 +1,11 @@
-﻿using instantMessagingServer.Models;
-using instantMessagingServer.Models.Api;
+﻿using instantMessagingCore.Crypto;
 using instantMessagingCore.Models.Dto;
+using instantMessagingServer.Models;
+using instantMessagingServer.Models.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using instantMessagingCore.Crypto;
 
 namespace instantMessagingServer.Controllers
 {
@@ -38,7 +36,9 @@ namespace instantMessagingServer.Controllers
                 user.Username = user.Username.ToLower();
 
                 DatabaseContext db = new(Configuration);
-                var selectedUser = db.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == PasswordUtils.hashAndSalt(user.Password, u.Salt));
+                var users = db.Users.Where(u => u.Username == user.Username).ToList();
+                var selectedUser = users.FirstOrDefault(u => u.Password == PasswordUtils.hashAndSalt(user.Password, u.Salt));
+
                 if (selectedUser != null)
                 {
                     var IDToken = Authentication.GetInstance().GetIDToken();
