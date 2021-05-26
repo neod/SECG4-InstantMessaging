@@ -21,4 +21,10 @@
     <PackageReference Include="SimpleTCP.Core" Version="1.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="instantMessaging.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

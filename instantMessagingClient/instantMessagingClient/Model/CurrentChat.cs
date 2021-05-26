@@ -40,14 +40,17 @@ namespace instantMessagingClient.Model
                 do
                 {
                     rawString = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
-                    MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
-                    Session.communication.sendMessage(msg);
-                    /*if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
-                    byte[] text = Encoding.ASCII.GetBytes(rawString);*/
+                    if (rawString != backCommand)
+                    {
+                        MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
+                        Session.communication.sendMessage(msg);
+                        /*if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
+                        byte[] text = Encoding.ASCII.GetBytes(rawString);*/
 
-                    Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
-                    Console.WriteLine("".PadRight(Console.BufferWidth));
-                    onTextChangeTrigger(EventArgs.Empty);
+                        Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
+                        Console.WriteLine("".PadRight(Console.BufferWidth));
+                        onTextChangeTrigger(EventArgs.Empty);
+                    }
                 } while (rawString != backCommand);
                 isRunning = false;
             });

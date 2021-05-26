@@ -508,3 +508,4 @@ obj/
 instantMessagingServer/instantMessagingServer/instantMessaging.db
 instantMessagingServer/instantMessagingServer/instantMessaging.db-wal
 instantMessagingServer/instantMessagingServer/instantMessaging.db-shm
+instantMessagingClient/instantMessagingClient/instantMessaging.db
