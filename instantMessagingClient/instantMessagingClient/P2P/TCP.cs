@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using instantMessagingClient.Database;
+using instantMessagingClient.JsonRest;
 using instantMessagingClient.Model;
 using SimpleTCP;
 
@@ -11,6 +13,7 @@ namespace instantMessagingClient.P2P
 {
     public class TCP
     {
+        public DatabaseContext db { get; set; }
         public string myHost { get; set; }
 
         public string myPort { get; set; }
@@ -27,6 +30,7 @@ namespace instantMessagingClient.P2P
         {
             this.myHost = myHost;
             this.myPort = myPort;//8910
+            db = new DatabaseContext();
         }
 
         public void Deconstruct(out SimpleTcpClient myClient, out SimpleTcpServer myServer)
@@ -57,15 +61,16 @@ namespace instantMessagingClient.P2P
 
         private void Message_Received(object sender, Message e)
         {
-            if (!Session.isOnMessagingPage) return;
-
-            //string decryptedText = "";
-            Console.WriteLine(e.MessageString);
+            myMessages dd = e.MessageString.Deserialize<myMessages>();
+            myMessages msg = new myMessages(dd.IdEnvoyeur, dd.message);
+            this.db.myMessages.Add(msg);//TODO BUG FIX
+            this.db.SaveChanges();
         }
 
-        public void sendMessage(string bytesToSend)
+        public void sendMessage(myMessages msg)
         {
-            myClient.WriteAndGetReply(bytesToSend);
+            string toSend = msg.Serialize();
+            myClient.WriteAndGetReply(toSend);
         }
 
         private static void getComfirmation(object sender, Message e)
