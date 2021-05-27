@@ -34,7 +34,6 @@ namespace instantMessagingClient.Model
         public void readLine()
         {
             isRunning = true;
-            ConsoleHelpers.WriteGreen("If you want to go back, type '" + backCommand + "'");
             Task.Factory.StartNew(() =>
             {
                 string rawString;

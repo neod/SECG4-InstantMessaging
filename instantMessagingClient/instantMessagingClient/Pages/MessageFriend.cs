@@ -20,6 +20,7 @@ namespace instantMessagingClient.Pages
             Session.communication.friendsPort = "50000";
             Session.communication.startClient();
 
+            chat.display();
             chat.readLine();
 
             chat.onTextChange += (sender, e) =>

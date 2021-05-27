@@ -52,14 +52,12 @@ namespace instantMessagingClient.P2P
         public void startClient()
         {
             myClient = new SimpleTcpClient { StringEncoder = Encoding.UTF8 };
-            myClient.DataReceived += getComfirmation;
             myClient.Connect(this.friendsHost, Convert.ToInt32(this.friendsPort));
         }
 
         private void Message_Received(object sender, Message e)
         {
             MyMessages msg = e.MessageString.Deserialize<MyMessages>();
-            //MyMessages msg = new MyMessages(dd.IdEnvoyeur, dd.message);
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
         }
@@ -69,13 +67,7 @@ namespace instantMessagingClient.P2P
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
             string toSend = msg.Serialize();
-            myClient.WriteAndGetReply(toSend);
-        }
-
-        private static void getComfirmation(object sender, Message e)
-        {
-            //jsp a quoi ca sert ici
-            //Console.WriteLine(e.MessageString);
+            myClient.Write(toSend);
         }
     }
 }
