@@ -72,6 +72,7 @@ namespace instantMessagingClient.P2P
             this.db.SaveChanges();
             string toSend = msg.Serialize();
             myClient.Write(toSend);
+            cm.AskUpdate(Session.tokens.UserId);
         }
     }
 }

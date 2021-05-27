@@ -36,12 +36,13 @@ namespace instantMessagingClient.Model
                     //don't accept null or empty
                     if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
                     //byte[] text = Encoding.ASCII.GetBytes(rawString);
+                    //Console.WriteLine(rawString);
 
                     MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
                     Session.communication.sendMessage(msg);
                     
                     Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
-                    Console.WriteLine("".PadRight(Console.BufferWidth));
+                    Console.Write("\nYou: " + rawString.PadRight(Console.BufferWidth));
                 } while (rawString != backCommand);
                 isRunning = false;
             });
