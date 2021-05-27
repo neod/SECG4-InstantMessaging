@@ -27,20 +27,30 @@ namespace instantMessagingClient.Model
         public void AskUpdate(int friendId)
         {
 
-            ChatInstances[friendId].onTextChangeTrigger(EventArgs.Empty);
+            GetOrAddChatInstance(friendId).onTextChangeTrigger(EventArgs.Empty);
         }
 
         public void AddEvent(int friendId, EventHandler eventHandler)
         {
-            ChatInstances[friendId].OnTextChange += eventHandler;
+            GetOrAddChatInstance(friendId).OnTextChange += eventHandler;
         }
 
         public void ClearEvent(int friendId)
         {
-            ChatInstances[friendId].ClearEvent();
+            GetOrAddChatInstance(friendId).ClearEvent();
         }
 
-        private class ChatInstance
+        public ChatInstance GetOrAddChatInstance(int friendId)
+        {
+            if (!ChatInstances.ContainsKey(friendId))
+            {
+                ChatInstances.Add(friendId, new ChatInstance());
+            }
+
+            return ChatInstances[friendId] ??= new ChatInstance();
+        }
+
+        public class ChatInstance
         {
             public event EventHandler OnTextChange;
 
