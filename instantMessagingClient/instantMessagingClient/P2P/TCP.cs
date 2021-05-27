@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using instantMessagingClient.Database;
 using instantMessagingClient.JsonRest;
+using instantMessagingClient.Model;
 using SimpleTCP;
 
 namespace instantMessagingClient.P2P
@@ -22,6 +23,8 @@ namespace instantMessagingClient.P2P
         public SimpleTcpClient myClient { get; set; }
 
         public SimpleTcpServer myServer { get; set; } 
+
+        private readonly ChatManager cm = ChatManager.getInstance();
 
         public TCP(string myHost, string myPort)
         {
@@ -60,6 +63,7 @@ namespace instantMessagingClient.P2P
             MyMessages msg = e.MessageString.Deserialize<MyMessages>();
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
+            cm.AskUpdate(msg.IdEnvoyeur);
         }
 
         public void sendMessage(MyMessages msg)

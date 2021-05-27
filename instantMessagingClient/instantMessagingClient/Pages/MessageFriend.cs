@@ -23,11 +23,15 @@ namespace instantMessagingClient.Pages
             chat.display();
             chat.readLine();
 
-            chat.onTextChange += (sender, e) =>
+            ChatManager cm = ChatManager.getInstance();
+            cm.AddEvent(ID, (sender, e) =>
             {
                 chat.display();
-            };
+            });
             while (chat.isRunning);
+
+            cm.ClearEvent(ID);
+
             Session.isOnMessagingPage = false;
             Application.GoBack();
         }

@@ -17,13 +17,6 @@ namespace instantMessagingClient.Model
 
         public string backCommand { get; set; }
 
-        public event EventHandler onTextChange;
-
-        protected virtual void onTextChangeTrigger(EventArgs e)
-        {
-            onTextChange?.Invoke(this, e);
-        }
-
         public CurrentChat(int friendID, string backCommand)
         {
             this.friendID = friendID;
@@ -49,7 +42,6 @@ namespace instantMessagingClient.Model
                     
                     Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
                     Console.WriteLine("".PadRight(Console.BufferWidth));
-                    onTextChangeTrigger(EventArgs.Empty);
                 } while (rawString != backCommand);
                 isRunning = false;
             });
