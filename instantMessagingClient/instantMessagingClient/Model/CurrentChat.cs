@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using instantMessagingClient.Database;
@@ -40,17 +41,16 @@ namespace instantMessagingClient.Model
                 do
                 {
                     rawString = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
-                    if (rawString != backCommand)
-                    {
-                        MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
-                        Session.communication.sendMessage(msg);
-                        /*if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
-                        byte[] text = Encoding.ASCII.GetBytes(rawString);*/
+                    //don't accept null or empty
+                    if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
+                    //byte[] text = Encoding.ASCII.GetBytes(rawString);
 
-                        Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
-                        Console.WriteLine("".PadRight(Console.BufferWidth));
-                        onTextChangeTrigger(EventArgs.Empty);
-                    }
+                    MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
+                    Session.communication.sendMessage(msg);
+                    
+                    Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
+                    Console.WriteLine("".PadRight(Console.BufferWidth));
+                    onTextChangeTrigger(EventArgs.Empty);
                 } while (rawString != backCommand);
                 isRunning = false;
             });
@@ -61,7 +61,19 @@ namespace instantMessagingClient.Model
             Console.SetCursorPosition(0, 0);
             ConsoleHelpers.WriteGreen("If you want to go back, type '" + backCommand + "'");
 
-            this.db.MyMessages.ToList().ForEach(m => Console.WriteLine(m.message));
+            this.db.MyMessages.ToList().ForEach(m =>
+            {
+                if (m.IdEnvoyeur == Session.tokens.UserId)
+                {
+                    Console.Write("You said: ");
+                }
+                else
+                {
+                    Console.Write("UserId" + friendID + " said: ");
+                }
+
+                Console.WriteLine(m.message);
+            });
         }
     }
 }

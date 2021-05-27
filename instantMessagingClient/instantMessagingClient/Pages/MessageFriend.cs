@@ -17,7 +17,7 @@ namespace instantMessagingClient.Pages
             CurrentChat chat = new CurrentChat(ID, backCommand);
 
             Session.communication.friendsHost = "127.0.0.1";
-            Session.communication.friendsPort = "60000";
+            Session.communication.friendsPort = "50000";
             Session.communication.startClient();
 
             chat.readLine();
@@ -26,9 +26,9 @@ namespace instantMessagingClient.Pages
             {
                 chat.display();
             };
-            while (chat.isRunning) ;
-            //Session.isOnMessagingPage = false;
-            //Application.GoBack();
+            while (chat.isRunning);
+            Session.isOnMessagingPage = false;
+            Application.GoBack();
         }
     }
 }

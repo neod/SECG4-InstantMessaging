@@ -10,6 +10,7 @@ namespace instantMessagingClient.P2P
     public class TCP
     {
         public DatabaseContext db { get; set; }
+
         public string myHost { get; set; }
 
         public string myPort { get; set; }
@@ -57,14 +58,16 @@ namespace instantMessagingClient.P2P
 
         private void Message_Received(object sender, Message e)
         {
-            MyMessages dd = e.MessageString.Deserialize<MyMessages>();
-            MyMessages msg = new MyMessages(dd.IdEnvoyeur, dd.message);
-            this.db.MyMessages.Add(msg);//TODO BUG FIX
+            MyMessages msg = e.MessageString.Deserialize<MyMessages>();
+            //MyMessages msg = new MyMessages(dd.IdEnvoyeur, dd.message);
+            this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
         }
 
         public void sendMessage(MyMessages msg)
         {
+            this.db.MyMessages.Add(msg);
+            this.db.SaveChanges();
             string toSend = msg.Serialize();
             myClient.WriteAndGetReply(toSend);
         }
