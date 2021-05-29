@@ -40,6 +40,7 @@ namespace instantMessagingServer.Models
             modelBuilder.Entity<PublicKeys>().HasKey(p => p.UserId);
 
             modelBuilder.Entity<Logs>().HasKey(l => l.Id);
+            modelBuilder.Entity<Logs>().Property(l => l.Id).ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Friends>().HasKey(f => new { f.UserId, f.FriendId });
 
