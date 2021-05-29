@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using instantMessagingClient.Database;
+using instantMessagingClient.JsonRest;
 using instantMessagingCore.Crypto;
 using instantMessagingCore.Models.Dto;
 
@@ -19,11 +20,11 @@ namespace instantMessagingClient.Model
 
         public string backCommand { get; set; }
 
-        public PublicKeys pkFriend { get; set; }
+        public postKey pkFriend { get; set; }
 
         public RSAManager myManager { get; set; }
 
-        public CurrentChat(int friendID, string backCommand, PublicKeys pkFriend)
+        public CurrentChat(int friendID, string backCommand, postKey pkFriend)
         {
             this.friendID = friendID;
             this.backCommand = backCommand;

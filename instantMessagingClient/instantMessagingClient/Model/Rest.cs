@@ -155,8 +155,8 @@ namespace instantMessagingClient.Model
             if (isValid())
             {
                 this.request = new RestRequest("/api/Keys/submit", DataFormat.Json);
-                //var bytes = Encoding.ASCII.GetBytes(getKey);
                 var param = new postKey(Session.tokens.UserId, getKey, DateTime.Now);
+                param.toBase64();
                 var obj = param.Serialize();
                 request.AddJsonBody(obj);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.JsonRest;
 using instantMessagingClient.Model;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
@@ -22,7 +23,8 @@ namespace instantMessagingClient.Pages
             var reponse = rest.getPublicKeyFriend(ID);
             var responsePeers = rest.getPeers(ID);
 
-            PublicKeys friendsPublicKeys = JsonConvert.DeserializeObject<PublicKeys>(reponse.Content);
+            postKey friendsPublicKeys = JsonConvert.DeserializeObject<postKey>(reponse.Content);
+            friendsPublicKeys.ToStringNormal();
             Peers friendPeer = JsonConvert.DeserializeObject<Peers>(responsePeers.Content);
 
             CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys);

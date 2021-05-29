@@ -82,9 +82,9 @@ namespace instantMessagingClient.P2P
             cm.AskUpdate(msg.IdEnvoyeur);
         }
 
-        public void sendMessage(MyMessages msg, PublicKeys pk)
+        public void sendMessage(MyMessages msg, postKey pk)
         {
-            RSAManager rsaA = new RSAManager(Encoding.Default.GetString(pk.Key));
+            RSAManager rsaA = new RSAManager(pk.Key);
             byte[] text = Encoding.ASCII.GetBytes(msg.message);
             text = rsaA.Encrypt(text);
             string encodedStr = Convert.ToBase64String(text);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace instantMessagingClient.JsonRest
 {
-    class postKey
+    public class postKey
     {
         public int userId { get; set; }
 
@@ -23,8 +23,18 @@ namespace instantMessagingClient.JsonRest
         public postKey(int userId, string key, DateTime valueDate)
         {
             this.userId = userId;
-            Key = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
+            Key = key;
             this.valueDate = valueDate;
+        }
+
+        public void toBase64()
+        {
+            Key = Convert.ToBase64String(Encoding.UTF8.GetBytes(Key));
+        }
+
+        public void ToStringNormal()
+        {
+            Key = Encoding.UTF8.GetString(Convert.FromBase64String(Key));
         }
     }
 }
