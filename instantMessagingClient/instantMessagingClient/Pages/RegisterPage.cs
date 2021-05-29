@@ -68,7 +68,7 @@ namespace instantMessagingClient.Pages
                     if (publicKeyResponse.IsSuccessful)
                     {
                         var myPrivateKey = myKeys.GetKey(true);
-                        Session.maKey = myPrivateKey;
+                        Session.maKey = myPrivateKey;//TODO mettre dans la database
                         Console.WriteLine(myPrivateKey);
                     }
                 }

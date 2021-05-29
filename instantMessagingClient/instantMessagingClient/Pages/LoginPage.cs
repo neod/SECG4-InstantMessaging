@@ -55,6 +55,8 @@ namespace instantMessagingClient.Pages
                 Session.tokens = deserializeObject;
                 Session.sessionPassword = password;
                 Session.sessionUsername = username;
+                //Session.maKey = from database TODO
+
                 ConsoleHelpers.WriteGreen("Successfully logged in " + username + "!");
                 Console.WriteLine();
             }

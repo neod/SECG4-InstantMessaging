@@ -175,5 +175,18 @@ namespace instantMessagingClient.Model
 
             return rep;
         }
+
+        public IRestResponse postPeers(Peers peer)
+        {
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("/api​/Keys", DataFormat.Json);
+                request.AddJsonBody(peer);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                rep = this.client.Post(this.request);
+            }
+            return rep;
+        }
     }
 }
