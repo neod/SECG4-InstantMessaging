@@ -198,7 +198,7 @@ namespace instantMessagingClient.Model
             IRestResponse rep = null;
             if (isValid())
             {
-                this.request = new RestRequest("/api​/Peers​/get​/{friendId}", Method.GET);
+                this.request = new RestRequest("/api/Peers/{friendId}", Method.GET);
                 request.AddUrlSegment("friendId", id);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Get(this.request);

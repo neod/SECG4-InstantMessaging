@@ -24,11 +24,11 @@ namespace instantMessagingClient.Pages
                 "https://wtfismyip.com/text",
                 "http://icanhazip.com"
             };
-            using (var webclient = new WebClient())
-                foreach (var service in services)
-                {
-                    try { return IPAddress.Parse(webclient.DownloadString(service)); } catch { }
-                }
+            using var webclient = new WebClient();
+            foreach (var service in services)
+            {
+                try { return IPAddress.Parse(webclient.DownloadString(service)); } catch { }
+            }
             return null;
         }
 
