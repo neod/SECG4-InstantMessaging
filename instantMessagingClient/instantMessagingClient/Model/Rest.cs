@@ -19,6 +19,7 @@ namespace instantMessagingClient.Model
         public Rest()
         {
             this.client = new RestClient("https://localhost:44307");
+            client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
         public Rest(string baseUrl)
