@@ -90,6 +90,7 @@ namespace instantMessagingServer.Controllers
                             dbPeer.Ipv4 = peer.Ipv4;
                             dbPeer.Ipv6 = peer.Ipv6;
                             dbPeer.Port = peer.Port;
+                            dbPeer.LastHeartBeat = peer.LastHeartBeat;
                             db.Peers.Update(dbPeer);
                         }
                         else
