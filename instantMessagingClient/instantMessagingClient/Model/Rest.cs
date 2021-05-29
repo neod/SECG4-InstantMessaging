@@ -207,5 +207,16 @@ namespace instantMessagingClient.Model
 
             return rep;
         }
+
+        public void sendHeartbeat()
+        {
+            if (isValid())
+            {
+                this.request = new RestRequest("/api/Peers/heartbeat", Method.PUT, DataFormat.None);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+
+                this.client.Put(this.request);
+            }
+        }
     }
 }

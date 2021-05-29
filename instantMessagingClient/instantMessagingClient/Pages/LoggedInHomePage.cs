@@ -68,6 +68,7 @@ namespace instantMessagingClient.Pages
                 Session.communication = new TCP(Localipv4, Convert.ToString((int)myPort));
                 Session.communication.startListener();
                 Session.hasAlreadyStarted = true;
+                Heartbeat.getInstance().start();
             }
         }
 
@@ -83,6 +84,7 @@ namespace instantMessagingClient.Pages
             Session.tokens = null;
             Session.communication = null;
             Session.isOnMessagingPage = false;
+            Heartbeat.getInstance().stop();
             Application.GoTo<Home>();
         }
     }
