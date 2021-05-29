@@ -31,7 +31,7 @@ namespace instantMessagingServer.Controllers
         /// <param name="friendId">The friend id</param>
         /// <returns>The friend peer</returns>
         // GET api/<PeersController>/5
-        [HttpGet("{friendId}")]
+        [HttpGet("get/{friendId}")]
         public IActionResult GetPeer(int friendId)
         {
             IActionResult response = Unauthorized();
