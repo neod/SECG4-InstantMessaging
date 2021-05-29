@@ -15,6 +15,23 @@ namespace instantMessagingClient.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.6");
 
+            modelBuilder.Entity("instantMessagingClient.Database.MyKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("myKey");
+                });
+
             modelBuilder.Entity("instantMessagingClient.Database.MyMessages", b =>
                 {
                     b.Property<int>("Id")

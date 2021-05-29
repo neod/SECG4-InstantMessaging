@@ -170,7 +170,7 @@ namespace instantMessagingClient.Model
             if (isValid())
             {
                 this.request = new RestRequest("api​/Keys/{friendId}", Method.GET);
-                request.AddUrlSegment("senderId", id);
+                request.AddUrlSegment("friendId", id);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Get(this.request);
             }

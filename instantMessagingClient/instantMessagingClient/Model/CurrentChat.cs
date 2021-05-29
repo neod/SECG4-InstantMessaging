@@ -29,7 +29,7 @@ namespace instantMessagingClient.Model
             this.backCommand = backCommand;
             this.db = new DatabaseContext();
             this.pkFriend = pkFriend;
-            this.myManager = new RSAManager(Session.maKey);
+            this.myManager = new RSAManager(Session.maKey.Key);
         }
         
         public void readLine()

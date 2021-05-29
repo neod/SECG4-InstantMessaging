@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using EasyConsoleApplication.Pages;
@@ -31,6 +32,19 @@ namespace instantMessagingClient.Pages
             return null;
         }
 
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
         public LoggedInHomePage()
         {
             Title = "Home: " + Session.sessionUsername + "(" + Session.tokens.UserId + ")";
@@ -45,13 +59,13 @@ namespace instantMessagingClient.Pages
             if (Session.hasAlreadyStarted == false)
             {
                 Rest rest = new Rest();
-                IPAddress ipv4 = GetMyIp();
+                string Localipv4 = GetLocalIPAddress();
                 IPAddress ipv6 = GetMyIp();
                 Random random = new Random();
                 var myPort = Convert.ToUInt16(random.Next(49153, 65534));
-                var param = new Peers(Session.tokens.UserId, ipv4.ToString(), ipv6.ToString(), myPort, DateTime.Now);
+                var param = new Peers(Session.tokens.UserId, Localipv4, ipv6.ToString(), myPort, DateTime.Now);
                 rest.postPeers(param);
-                Session.communication = new TCP(ipv4.ToString(), Convert.ToString((int)myPort));
+                Session.communication = new TCP(Localipv4, Convert.ToString((int)myPort));
                 Session.communication.startListener();
                 Session.hasAlreadyStarted = true;
             }

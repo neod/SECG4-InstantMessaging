@@ -8,8 +8,8 @@ using instantMessagingClient.Database;
 namespace instantMessagingClient.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210526170451_deux")]
-    partial class deux
+    [Migration("20210529150600_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -17,7 +17,24 @@ namespace instantMessagingClient.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.6");
 
-            modelBuilder.Entity("instantMessagingClient.Database.myMessages", b =>
+            modelBuilder.Entity("instantMessagingClient.Database.MyKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("myKey");
+                });
+
+            modelBuilder.Entity("instantMessagingClient.Database.MyMessages", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +48,7 @@ namespace instantMessagingClient.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("myMessages");
+                    b.ToTable("MyMessages");
                 });
 #pragma warning restore 612, 618
         }

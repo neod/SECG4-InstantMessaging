@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using instantMessagingClient.Database;
 using instantMessagingClient.P2P;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
@@ -23,7 +24,7 @@ namespace instantMessagingClient.Model
         public static TCP communication { get; set; }
 
         //juste pour test
-        public static string maKey { get; set; }
+        public static MyKey maKey { get; set; }
 
         public static bool hasAlreadyStarted { get; set; }
     }

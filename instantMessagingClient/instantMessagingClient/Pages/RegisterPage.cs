@@ -3,6 +3,7 @@ using System.Net;
 using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Database;
 using instantMessagingClient.Model;
 using instantMessagingCore.Crypto;
 using instantMessagingCore.Models.Dto;
@@ -70,11 +71,12 @@ namespace instantMessagingClient.Pages
                 if (publicKeyResponse is {IsSuccessful: true})
                 {
                     var myPrivateKey = myKeys.GetKey(true);
-                    Session.maKey = myPrivateKey;//TODO mettre dans la database
-                    Console.WriteLine(myPrivateKey);
+                    DatabaseContext db = new DatabaseContext();
+                    MyKey key = new MyKey(Session.tokens.UserId, myPrivateKey);
+                    db.myKey.Add(key);
+                    db.SaveChanges();
+                    ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
                 }
-
-                ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
             }
             while (response != null && response.StatusCode != HttpStatusCode.OK);
 

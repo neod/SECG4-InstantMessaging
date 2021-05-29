@@ -4,10 +4,12 @@ using System.Net;
 using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
+using instantMessagingClient.Database;
 using instantMessagingClient.Model;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Linq;
 
 namespace instantMessagingClient.Pages
 {
@@ -55,7 +57,9 @@ namespace instantMessagingClient.Pages
                 Session.tokens = deserializeObject;
                 Session.sessionPassword = password;
                 Session.sessionUsername = username;
-                //Session.maKey = from database TODO
+                DatabaseContext db = new DatabaseContext();
+                var myPrivateKey = db.myKey.FirstOrDefault(k => k.UserId == Session.tokens.UserId);
+                Session.maKey = myPrivateKey;
 
                 ConsoleHelpers.WriteGreen("Successfully logged in " + username + "!");
                 Console.WriteLine();
