@@ -41,12 +41,21 @@ namespace instantMessagingServer.Models
                     while (true)
                     {
                         count = 0;
-                        while (LogsQueue.TryDequeue(out log) && count < memoryLogsSize)
+                        try
                         {
-                            ++count;
-                            db.Logs.Add(log);
+                            while (LogsQueue.TryDequeue(out log) && count < memoryLogsSize)
+                            {
+                                ++count;
+                                db.Logs.Add(log);
+                            }
+                            db.SaveChanges();
                         }
-                        db.SaveChanges();
+                        catch (Exception ex)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(ex.Message);
+                            Console.ResetColor();
+                        }
                         Thread.Sleep(1000);
                     }
                 });
@@ -58,7 +67,18 @@ namespace instantMessagingServer.Models
 
         public void write(Logs log)
         {
-            if (isEnable) LogsQueue.Enqueue(log);
+            if (isEnable)
+                try
+                {
+                    LogsQueue.Enqueue(log);
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(ex.Message);
+                    Console.ResetColor();
+                }
+                
         }
         public void write(Logs.EType type, string message)
         {
