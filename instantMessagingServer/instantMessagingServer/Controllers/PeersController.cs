@@ -83,8 +83,22 @@ namespace instantMessagingServer.Controllers
 
                     if (peer.UserId == currentUser.Id)
                     {
-                        db.Peers.Add(peer);
+                        var dbPeer = db.Peers.FirstOrDefault(p => p.UserId == currentUser.Id);
+
+                        if (dbPeer != null)
+                        {
+                            dbPeer.Ipv4 = peer.Ipv4;
+                            dbPeer.Ipv6 = peer.Ipv6;
+                            dbPeer.Port = peer.Port;
+                            db.Peers.Update(dbPeer);
+                        }
+                        else
+                        {
+                            db.Peers.Add(peer);
+                        }
+
                         db.SaveChanges();
+
                         response = Ok();
                     }
                 }
