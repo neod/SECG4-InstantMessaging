@@ -26,7 +26,7 @@ namespace instantMessagingServer.Controllers
             Configuration = configuration;
             this.authentication = Authentication.GetInstance();
         }
-
+        
         /// <summary>
         /// Return the selected friend user public key
         /// </summary>
@@ -66,7 +66,7 @@ namespace instantMessagingServer.Controllers
         /// <param name="pk">The public key to register</param>
         /// <returns>the http status</returns>
         // POST api/<KeysController>
-        [HttpPost]
+        [HttpPost("submit")]
         public IActionResult Post([FromBody] PublicKeys pk)
         {
             IActionResult response = Unauthorized();
@@ -102,5 +102,11 @@ namespace instantMessagingServer.Controllers
 
             return response;
         }
+        /*
+        [Route("/{**catchAll}")]
+        public IActionResult CatchAll([FromBody] object body, string catchAll)
+        {
+            return Ok(catchAll);
+        }*/
     }
 }

@@ -68,7 +68,7 @@ namespace instantMessagingServer.Controllers
         /// <param name="peer">The peer data</param>
         /// <returns>Http request result</returns>
         // POST api/<PeersController>
-        [HttpPost]
+        [HttpPost("Submit")]
         public IActionResult PostMyPeer([FromBody] Peers peer)
         {
             IActionResult response = Unauthorized();
