@@ -154,7 +154,8 @@ namespace instantMessagingClient.Model
             if (isValid())
             {
                 this.request = new RestRequest("/api​/Keys", DataFormat.Json);
-                var param = new postKey { Key = getKey, valueDate = DateTime.Now, userId = Session.tokens.UserId };
+                var bytes = Encoding.ASCII.GetBytes(getKey);
+                var param = new PublicKeys(Session.tokens.UserId, bytes, DateTime.Now);
                 request.AddJsonBody(param);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Post(this.request);
@@ -181,7 +182,7 @@ namespace instantMessagingClient.Model
             IRestResponse rep = null;
             if (isValid())
             {
-                this.request = new RestRequest("/api​/Keys", DataFormat.Json);
+                this.request = new RestRequest("/api​/Peers", DataFormat.Json);
                 request.AddJsonBody(peer);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Post(this.request);
