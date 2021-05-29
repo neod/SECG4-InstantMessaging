@@ -22,6 +22,7 @@ namespace instantMessagingClient.Model
 
         public postKey pkFriend { get; set; }
 
+        public RSAManager hisManager { get; set; }
         public RSAManager myManager { get; set; }
 
         public CurrentChat(int friendID, string backCommand, postKey pkFriend)
@@ -30,6 +31,7 @@ namespace instantMessagingClient.Model
             this.backCommand = backCommand;
             this.db = new DatabaseContext();
             this.pkFriend = pkFriend;
+            this.hisManager = new RSAManager(pkFriend.Key);
             this.myManager = new RSAManager(Session.maKey.Key);
         }
         
@@ -65,6 +67,8 @@ namespace instantMessagingClient.Model
                 if (m.IdEnvoyeur == Session.tokens.UserId)
                 {
                     Console.Write("You said: ");
+                    var text = this.myManager.Decrypt(Convert.FromBase64String(m.message));
+                    Console.WriteLine(Encoding.UTF8.GetString(text));
                 }
                 else
                 {

@@ -82,16 +82,28 @@ namespace instantMessagingClient.P2P
             cm.AskUpdate(msg.IdEnvoyeur);
         }
 
-        public void sendMessage(MyMessages msg, postKey pk)
+        public void sendMessage(MyMessages msg, postKey friendKey)
         {
-            RSAManager rsaA = new RSAManager(pk.Key);
+            RSAManager rsaFriend = new RSAManager(friendKey.Key);
+            RSAManager myRSA = new RSAManager(Session.maKey.Key);
+
             byte[] text = Encoding.ASCII.GetBytes(msg.message);
-            text = rsaA.Encrypt(text);
+            text = rsaFriend.Encrypt(text);
+
+            byte[] mytext = Encoding.ASCII.GetBytes(msg.message);
+            mytext = myRSA.Encrypt(mytext);
+
+
             string encodedStr = Convert.ToBase64String(text);
+            string myencodedStr = Convert.ToBase64String(mytext);
+
             msg.message = encodedStr;
 
-            this.db.MyMessages.Add(msg);
+            //copy pour ma bd
+            MyMessages myMsg = new MyMessages(msg.IdEnvoyeur, myencodedStr);
+            this.db.MyMessages.Add(myMsg);
             this.db.SaveChanges();
+
             string toSend = msg.Serialize();
             try
             {
@@ -99,7 +111,7 @@ namespace instantMessagingClient.P2P
             }
             catch (Exception e)
             {
-                ConsoleHelpers.WriteRed("You friend disconnected");
+                ConsoleHelpers.WriteRed("Your friend disconnected");
                 throw;
             }
             
