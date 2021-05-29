@@ -93,7 +93,16 @@ namespace instantMessagingClient.P2P
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
             string toSend = msg.Serialize();
-            myClient.Write(toSend);
+            try
+            {
+                myClient.Write(toSend);
+            }
+            catch (Exception e)
+            {
+                ConsoleHelpers.WriteRed("You friend disconnected");
+                throw;
+            }
+            
             cm.AskUpdate(Session.tokens.UserId);
         }
     }

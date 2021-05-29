@@ -15,7 +15,7 @@ namespace instantMessagingServer.Controllers
     [ApiController]
     public class PeersController : ControllerBase
     {
-        private const int heartbeatLimit = 5;
+        private const int heartbeatLimit = 5000;
         private readonly IConfiguration Configuration;
         private readonly Authentication authentication;
 

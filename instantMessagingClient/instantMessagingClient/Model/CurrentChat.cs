@@ -69,10 +69,9 @@ namespace instantMessagingClient.Model
                 else
                 {
                     Console.Write("UserId" + friendID + " said: ");
+                    var text = this.myManager.Decrypt(Convert.FromBase64String(m.message));
+                    Console.WriteLine(Encoding.UTF8.GetString(text));
                 }
-
-                var text = this.myManager.Decrypt(Convert.FromBase64String(m.message));
-                Console.WriteLine(Encoding.UTF8.GetString(text));
             });
         }
     }
