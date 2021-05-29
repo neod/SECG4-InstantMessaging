@@ -39,7 +39,7 @@ namespace instantMessagingClient.Pages
 
                 response = rest.Inscription(username, password);
 
-                if (response != null && !response.IsSuccessful)
+                if (response is {IsSuccessful: false})
                 {
                     ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
                     if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -54,28 +54,29 @@ namespace instantMessagingClient.Pages
                     }
                     Application.GoTo<Home>();
                 }
-                
-                var responseContent = response.Content;
-                Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
-                Session.tokens = deserializeObject;
+
+                if (response != null)
+                {
+                    var responseContent = response.Content;
+                    Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
+                    Session.tokens = deserializeObject;
+                }
+
                 Session.sessionPassword = password;
                 Session.sessionUsername = username;
 
                 RSAManager myKeys = new RSAManager();
                 IRestResponse publicKeyResponse = rest.postKey(myKeys.GetKey(false));
-                if (publicKeyResponse != null)
+                if (publicKeyResponse is {IsSuccessful: true})
                 {
-                    if (publicKeyResponse.IsSuccessful)
-                    {
-                        var myPrivateKey = myKeys.GetKey(true);
-                        Session.maKey = myPrivateKey;//TODO mettre dans la database
-                        Console.WriteLine(myPrivateKey);
-                    }
+                    var myPrivateKey = myKeys.GetKey(true);
+                    Session.maKey = myPrivateKey;//TODO mettre dans la database
+                    Console.WriteLine(myPrivateKey);
                 }
 
                 ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
             }
-            while (response.StatusCode != HttpStatusCode.OK);
+            while (response != null && response.StatusCode != HttpStatusCode.OK);
 
             ConsoleHelpers.HitEnterToContinue();
             Application.GoTo<LoginPage>();

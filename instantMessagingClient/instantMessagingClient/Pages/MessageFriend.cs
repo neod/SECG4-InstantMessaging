@@ -20,34 +20,46 @@ namespace instantMessagingClient.Pages
             //get public key of friend
             Rest rest = new Rest();
             var reponse = rest.getPublicKeyFriend(ID);
-            var responseContent = reponse.Content;
-            PublicKeys friendsPublicKeys = JsonConvert.DeserializeObject<PublicKeys>(responseContent);
-
-            CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys);
-
-            Session.communication.friendsHost = "127.0.0.1";
-            Session.communication.friendsPort = "50000";
-            Session.communication.startClient();
-
-            chat.display();
-            chat.readLine();
-
-            ChatManager cm = ChatManager.getInstance();
-            cm.AddEvent(ID, (sender, e) =>
+            if (reponse != null)
             {
-                chat.display();
-            });
-            cm.AddEvent(Session.tokens.UserId, (sender, e) =>
+                if (reponse.IsSuccessful)
+                {
+                    var responseContent = reponse.Content;
+                    PublicKeys friendsPublicKeys = JsonConvert.DeserializeObject<PublicKeys>(responseContent);
+
+                    CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys);
+
+                    Session.communication.friendsHost = "127.0.0.1";
+                    Session.communication.friendsPort = "50000";
+                    Session.communication.startClient();
+
+                    chat.display();
+                    chat.readLine();
+
+                    ChatManager cm = ChatManager.getInstance();
+                    cm.AddEvent(ID, (sender, e) =>
+                    {
+                        chat.display();
+                    });
+                    cm.AddEvent(Session.tokens.UserId, (sender, e) =>
+                    {
+                        chat.display();
+                    });
+                    while (chat.isRunning) ;
+
+                    cm.ClearEvent(ID);
+                    cm.ClearEvent(Session.tokens.UserId);
+
+                    Session.isOnMessagingPage = false;
+                    Application.GoBack();
+                }
+            }
+            else
             {
-                chat.display();
-            });
-            while (chat.isRunning);
-
-            cm.ClearEvent(ID);
-            cm.ClearEvent(Session.tokens.UserId);
-
-            Session.isOnMessagingPage = false;
-            Application.GoBack();
+                ConsoleHelpers.WriteRed("Error retrievings friends public key");
+                ConsoleHelpers.HitEnterToContinue();
+                Application.GoBack();
+            }
         }
     }
 }
