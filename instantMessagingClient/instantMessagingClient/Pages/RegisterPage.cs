@@ -4,6 +4,7 @@ using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
+using instantMessagingCore.Crypto;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
 using RestSharp;
@@ -37,6 +38,7 @@ namespace instantMessagingClient.Pages
                 Console.WriteLine();
 
                 response = rest.Inscription(username, password);
+
                 if (response != null && !response.IsSuccessful)
                 {
                     ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
@@ -52,6 +54,25 @@ namespace instantMessagingClient.Pages
                     }
                     Application.GoTo<Home>();
                 }
+                
+                var responseContent = response.Content;
+                Tokens deserializeObject = JsonConvert.DeserializeObject<Tokens>(responseContent);
+                Session.tokens = deserializeObject;
+                Session.sessionPassword = password;
+                Session.sessionUsername = username;
+
+                RSAManager myKeys = new RSAManager();
+                IRestResponse publicKeyResponse = rest.postKey(myKeys.GetKey(false));
+                if (publicKeyResponse != null)
+                {
+                    if (publicKeyResponse.IsSuccessful)
+                    {
+                        var myPrivateKey = myKeys.GetKey(true);
+                        Session.maKey = myPrivateKey;
+                        Console.WriteLine(myPrivateKey);
+                    }
+                }
+
                 ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
             }
             while (response.StatusCode != HttpStatusCode.OK);

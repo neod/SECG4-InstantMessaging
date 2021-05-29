@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.Model;
+using instantMessagingCore.Models.Dto;
+using Newtonsoft.Json;
 
 namespace instantMessagingClient.Pages
 {
@@ -14,10 +16,17 @@ namespace instantMessagingClient.Pages
 
             Console.Clear();
             const string backCommand = "/back";
-            CurrentChat chat = new CurrentChat(ID, backCommand);
+
+            //get public key of friend
+            Rest rest = new Rest();
+            var reponse = rest.getPublicKeyFriend(ID);
+            var responseContent = reponse.Content;
+            PublicKeys friendsPublicKeys = JsonConvert.DeserializeObject<PublicKeys>(responseContent);
+
+            CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys);
 
             Session.communication.friendsHost = "127.0.0.1";
-            Session.communication.friendsPort = "60000";
+            Session.communication.friendsPort = "50000";
             Session.communication.startClient();
 
             chat.display();

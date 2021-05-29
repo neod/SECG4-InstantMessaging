@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using EasyConsoleApplication;
 using instantMessagingClient.Database;
 using instantMessagingClient.JsonRest;
 using instantMessagingClient.Model;
+using instantMessagingClient.Pages;
+using instantMessagingCore.Crypto;
+using instantMessagingCore.Models.Dto;
 using SimpleTCP;
 
 namespace instantMessagingClient.P2P
@@ -48,6 +52,7 @@ namespace instantMessagingClient.P2P
             myServer.DataReceived += Message_Received;
 
             IPAddress ip = IPAddress.Parse(this.myHost);
+            myServer.Stop();
             myServer.Start(ip, Convert.ToInt32(this.myPort));
             return myServer.IsStarted;
         }
@@ -55,19 +60,36 @@ namespace instantMessagingClient.P2P
         public void startClient()
         {
             myClient = new SimpleTcpClient { StringEncoder = Encoding.UTF8 };
-            myClient.Connect(this.friendsHost, Convert.ToInt32(this.friendsPort));
+            try
+            {
+                myClient.Connect(this.friendsHost, Convert.ToInt32(this.friendsPort));
+            }
+            catch (Exception e)
+            {
+                ConsoleHelpers.WriteRed(e.Message);
+                ConsoleHelpers.HitEnterToContinue();
+                Application.GoTo<FriendList>();
+                throw;
+            }
         }
 
         private void Message_Received(object sender, Message e)
         {
             MyMessages msg = e.MessageString.Deserialize<MyMessages>();
+            
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
             cm.AskUpdate(msg.IdEnvoyeur);
         }
 
-        public void sendMessage(MyMessages msg)
+        public void sendMessage(MyMessages msg, PublicKeys pk)
         {
+            RSAManager rsaA = new RSAManager(Encoding.Default.GetString(pk.Key));
+            byte[] text = Encoding.ASCII.GetBytes(msg.message);
+            text = rsaA.Encrypt(text);
+            string encodedStr = Convert.ToBase64String(text);
+            msg.message = encodedStr;
+
             this.db.MyMessages.Add(msg);
             this.db.SaveChanges();
             string toSend = msg.Serialize();

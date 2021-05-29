@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EasyConsoleApplication;
 using instantMessagingClient.Database;
+using instantMessagingCore.Crypto;
+using instantMessagingCore.Models.Dto;
 
 namespace instantMessagingClient.Model
 {
@@ -17,11 +19,17 @@ namespace instantMessagingClient.Model
 
         public string backCommand { get; set; }
 
-        public CurrentChat(int friendID, string backCommand)
+        public PublicKeys pkFriend { get; set; }
+
+        public RSAManager myManager { get; set; }
+
+        public CurrentChat(int friendID, string backCommand, PublicKeys pkFriend)
         {
             this.friendID = friendID;
             this.backCommand = backCommand;
             this.db = new DatabaseContext();
+            this.pkFriend = pkFriend;
+            this.myManager = new RSAManager(Session.maKey);
         }
         
         public void readLine()
@@ -35,11 +43,9 @@ namespace instantMessagingClient.Model
                     rawString = ConsoleHelpers.Readline(ConsoleColor.White, "You: ");
                     //don't accept null or empty
                     if (string.IsNullOrEmpty(rawString) || rawString == backCommand) continue;
-                    //byte[] text = Encoding.ASCII.GetBytes(rawString);
-                    //Console.WriteLine(rawString);
-
+                    
                     MyMessages msg = new MyMessages(Session.tokens.UserId, rawString);
-                    Session.communication.sendMessage(msg);
+                    Session.communication.sendMessage(msg, pkFriend);
                     
                     Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
                     Console.Write("\nYou: " + rawString.PadRight(Console.BufferWidth));
@@ -64,7 +70,8 @@ namespace instantMessagingClient.Model
                     Console.Write("UserId" + friendID + " said: ");
                 }
 
-                Console.WriteLine(m.message);
+                var text = this.myManager.Decrypt(Convert.FromBase64String(m.message));
+                Console.WriteLine(Encoding.UTF8.GetString(text));
             });
         }
     }

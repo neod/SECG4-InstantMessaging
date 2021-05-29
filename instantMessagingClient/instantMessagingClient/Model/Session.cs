@@ -21,5 +21,8 @@ namespace instantMessagingClient.Model
         public static bool isOnMessagingPage { get; set; }
 
         public static TCP communication { get; set; }
+
+        //juste pour test
+        public static string maKey { get; set; }
     }
 }

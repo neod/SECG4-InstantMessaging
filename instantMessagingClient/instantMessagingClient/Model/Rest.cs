@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security;
-using System.Security.Cryptography;
 using System.Text;
 using EasyConsoleApplication;
+using instantMessagingClient.JsonRest;
 using instantMessagingClient.Pages;
 using instantMessagingCore.Models.Dto;
 using Newtonsoft.Json;
@@ -144,6 +142,34 @@ namespace instantMessagingClient.Model
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 request.AddUrlSegment("senderId", _ID);
                 request.AddUrlSegment("requestAction", requestAction);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
+        }
+
+        public IRestResponse postKey(string getKey)
+        {
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("/api​/Keys", DataFormat.Json);
+                var param = new postKey { Key = getKey, valueDate = DateTime.Now, userId = Session.tokens.UserId };
+                request.AddJsonBody(param);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                rep = this.client.Post(this.request);
+            }
+            return rep;
+        }
+
+        public IRestResponse getPublicKeyFriend(int id)
+        {
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("api​/Keys/{friendId}", Method.GET);
+                request.AddUrlSegment("senderId", id);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Get(this.request);
             }
 
