@@ -19,6 +19,8 @@ namespace instantMessagingServer.Controllers
         private readonly IConfiguration Configuration;
         private readonly Authentication authentication;
 
+        private readonly LogsManager logsManager = LogsManager.GetInstance();
+
         public PeersController(IConfiguration Configuration)
         {
             this.Configuration = Configuration;
@@ -54,9 +56,18 @@ namespace instantMessagingServer.Controllers
                     }
                     else
                     {
+                        logsManager.write(Logs.EType.warning, $"function: {nameof(GetPeer)}, error: {nameof(NotFound)}, User: {User.Identity.Name} token, Friendid: {friendId}");
                         response = NotFound();
                     }
                 }
+                else
+                {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(GetPeer)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token, Friendid: {friendId}");
+                }
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(GetPeer)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
             }
 
             return response;
@@ -102,7 +113,19 @@ namespace instantMessagingServer.Controllers
 
                         response = Ok();
                     }
+                    else
+                    {
+                        logsManager.write(Logs.EType.error, $"function: {nameof(PostMyPeer)}, error: {nameof(Unauthorized)}, {nameof(Peers)} from {nameof(peer.UserId)}:{peer.UserId} does not belong to {User.Identity.Name} token user");
+                    }
                 }
+                else
+                {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(PostMyPeer)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
+                }
+            }
+            else
+            {
+                logsManager.write(Logs.EType.error, $"function: {nameof(PostMyPeer)}, error: {nameof(Peers)} ModelState invalid, User: {User.Identity.Name} token");
             }
 
             return response;
@@ -118,23 +141,20 @@ namespace instantMessagingServer.Controllers
         {
             IActionResult response = Unauthorized();
 
-            if (ModelState.IsValid)
+            var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
+            if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
             {
-                var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
-                if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
+                DatabaseContext db = new(Configuration);
+                var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+
+                var peer = db.Peers.FirstOrDefault(p => p.UserId == currentUser.Id);
+                if (peer != null)
                 {
-                    DatabaseContext db = new(Configuration);
-                    var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+                    peer.LastHeartBeat = DateTime.Now;
+                    db.Peers.Update(peer);
+                    db.SaveChanges();
 
-                    var peer = db.Peers.FirstOrDefault(p => p.UserId == currentUser.Id);
-                    if (peer != null)
-                    {
-                        peer.LastHeartBeat = DateTime.Now;
-                        db.Peers.Update(peer);
-                        db.SaveChanges();
-
-                        response = Ok();
-                    }
+                    response = Ok();
                 }
             }
 

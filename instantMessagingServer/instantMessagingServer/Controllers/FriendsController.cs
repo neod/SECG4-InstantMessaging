@@ -19,6 +19,7 @@ namespace instantMessagingServer.Controllers
 
         private readonly IConfiguration Configuration;
         private readonly Authentication authentication;
+        private readonly LogsManager logsManager = LogsManager.GetInstance();
 
         public FriendsController(IConfiguration configuration)
         {
@@ -43,8 +44,14 @@ namespace instantMessagingServer.Controllers
 
                 var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
 
-                response = Ok(db.Friends.Where(f => (f.UserId == currentUser.Id || f.FriendId == currentUser.Id) && f.Status == Friends.RequestStatus.accepted));
+                var friendList = db.Friends.Where(f => (f.UserId == currentUser.Id || f.FriendId == currentUser.Id) && f.Status == Friends.RequestStatus.accepted);
 
+                response = Ok(friendList);
+
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(GetFriendList)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
             }
 
             return response;
@@ -67,11 +74,14 @@ namespace instantMessagingServer.Controllers
 
                 var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
 
-                response = Ok(
-                    db.Friends.Where(f => f.FriendId == currentUser.Id &&
-                    f.Status == Friends.RequestStatus.waiting)
-                    );
+                var pendingRequest = db.Friends.Where(f => f.FriendId == currentUser.Id && f.Status == Friends.RequestStatus.waiting);
 
+                response = Ok(pendingRequest);
+
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(GetPendingrequest)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
             }
 
             return response;
@@ -119,6 +129,15 @@ namespace instantMessagingServer.Controllers
                     db.SaveChanges();
                     response = Ok();
                 }
+                else
+                {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(ActionOnPendingrequest)}, error: {nameof(NotFound)}, Friendid: {friend.UserId}, {nameof(Friends.Action)}: {Enum.GetName(typeof(Friends.Action), requestAction)}");
+                    response = NotFound();
+                }
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(ActionOnPendingrequest)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
             }
 
             return response;
@@ -145,6 +164,7 @@ namespace instantMessagingServer.Controllers
 
                 if (friendUser == null)
                 {
+                    logsManager.write(Logs.EType.error, $"function: {nameof(SendRequest)}, error: {nameof(BadRequest)}, {nameof(friendName)}: {friendName} don't exist");
                     response = BadRequest($"{nameof(ArgumentException)}: {nameof(friendName)} {friendName} don't exist");
                 }
                 else
@@ -160,6 +180,10 @@ namespace instantMessagingServer.Controllers
                     response = Ok();
                 }
 
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(SendRequest)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
             }
 
             return response;

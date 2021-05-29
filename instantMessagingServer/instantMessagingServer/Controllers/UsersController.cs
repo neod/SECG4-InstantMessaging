@@ -15,6 +15,8 @@ namespace instantMessagingServer.Controllers
     {
         private readonly IConfiguration Configuration;
 
+        private readonly LogsManager logsManager = LogsManager.GetInstance();
+
         public UsersController(IConfiguration Configuration)
         {
             this.Configuration = Configuration;
@@ -62,7 +64,16 @@ namespace instantMessagingServer.Controllers
 
                     response = Ok(new Tokens(selectedUser.Id, token, ExpirationDate));
                 }
+                else
+                {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(Connexion)}, error: {nameof(Unauthorized)}, {user.Username} {nameof(user.Username)}");
+                }
             }
+            else
+            {
+                logsManager.write(Logs.EType.error, $"function: {nameof(Connexion)}, error: {nameof(UsersBasic)} ModelState invalid, User: {user.Username}");
+            }
+
             return response;
         }
 
@@ -85,6 +96,7 @@ namespace instantMessagingServer.Controllers
 
                 if (db.Users.Any(u => u.Username == user.Username))
                 {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(Inscription)}, error: {nameof(BadRequest)}, {user.Username} {nameof(user.Username)} is already used");
                     response = BadRequest($"{nameof(ArgumentException)}: {nameof(user.Username)} {user.Username} is already used");
                 }
                 else
@@ -104,18 +116,12 @@ namespace instantMessagingServer.Controllers
                     response = Ok(new Tokens(newUser.Id, token, ExpirationDate));
                 }
             }
-            return response;
-        }
+            else
+            {
+                logsManager.write(Logs.EType.error, $"function: {nameof(Inscription)}, error: {nameof(UsersBasic)} ModelState invalid, User: {user.Username}");
+            }
 
-        // DELETE api/<UsersController>/Delete/5
-        /// <summary>
-        /// Users Delete
-        /// </summary>
-        /// <param name="id">The user id to delete</param>
-        [HttpDelete("Delete/{id:int}")]
-        public void Delete(int id)
-        {
-            //TODO: implémenter la suppresion d'un utilisateur(uniquement par lui meme)
+            return response;
         }
 
     }
