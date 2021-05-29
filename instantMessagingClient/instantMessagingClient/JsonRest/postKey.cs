@@ -19,5 +19,12 @@ namespace instantMessagingClient.JsonRest
         /// The reference date
         /// </summary>
         public DateTime valueDate { get; set; }
+
+        public postKey(int userId, string key, DateTime valueDate)
+        {
+            this.userId = userId;
+            Key = Convert.ToBase64String(Encoding.UTF8.GetBytes(key));
+            this.valueDate = valueDate;
+        }
     }
 }

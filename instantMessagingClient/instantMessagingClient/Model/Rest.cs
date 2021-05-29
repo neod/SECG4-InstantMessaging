@@ -153,10 +153,11 @@ namespace instantMessagingClient.Model
             IRestResponse rep = null;
             if (isValid())
             {
-                this.request = new RestRequest("/api​/Keys", DataFormat.Json);
-                var bytes = Encoding.ASCII.GetBytes(getKey);
-                var param = new PublicKeys(Session.tokens.UserId, bytes, DateTime.Now);
-                request.AddJsonBody(param);
+                this.request = new RestRequest("/api/Keys/submit", DataFormat.Json);
+                //var bytes = Encoding.ASCII.GetBytes(getKey);
+                var param = new postKey(Session.tokens.UserId, getKey, DateTime.Now);
+                var obj = param.Serialize();
+                request.AddJsonBody(obj);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
                 rep = this.client.Post(this.request);
             }
@@ -182,9 +183,11 @@ namespace instantMessagingClient.Model
             IRestResponse rep = null;
             if (isValid())
             {
-                this.request = new RestRequest("/api​/Peers", DataFormat.Json);
+                this.request = new RestRequest("/api/Peers/Submit", Method.POST, DataFormat.Json);
                 request.AddJsonBody(peer);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                request.AddHeader("Cache-Control", "no-cache");
+
                 rep = this.client.Post(this.request);
             }
             return rep;
