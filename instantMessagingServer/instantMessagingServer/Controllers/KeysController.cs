@@ -33,7 +33,7 @@ namespace instantMessagingServer.Controllers
         /// <param name="friendId">friend id user</param>
         /// <returns>the selecte public key</returns>
         // GET api/<KeysController>/5
-        [HttpGet("{friendId}")]
+        [HttpGet("get/{friendId}")]
         public IActionResult Get(int friendId)
         {
             IActionResult response = Unauthorized();
