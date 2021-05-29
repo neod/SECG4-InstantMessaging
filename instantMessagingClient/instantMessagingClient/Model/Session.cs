@@ -24,5 +24,7 @@ namespace instantMessagingClient.Model
 
         //juste pour test
         public static string maKey { get; set; }
+
+        public static bool hasAlreadyStarted { get; set; }
     }
 }

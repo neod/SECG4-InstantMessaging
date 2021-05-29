@@ -20,8 +20,12 @@ namespace instantMessagingClient.Pages
                 Color = ConsoleColor.Yellow
             });
 
-            Session.communication = new TCP("127.0.0.1", "60000");
-            Session.communication.startListener();
+            if (Session.hasAlreadyStarted == false)
+            {
+                Session.communication = new TCP("127.0.0.1", "60000");
+                Session.communication.startListener();
+                Session.hasAlreadyStarted = true;
+            }
         }
 
         private void clickFriendsList()
