@@ -13,8 +13,10 @@ namespace instantMessagingServer.Models
         // Singleton
         private static LogsManager instance { get; set; }
 
-        private const int memoryLogsSize = 2;//100_000;
+        private const int memoryLogsSize = 1_000;
         private readonly ConcurrentQueue<Logs> LogsQueue;
+
+        private readonly bool isEnable;
 
         private DatabaseContext db { get; set; }
 
@@ -25,32 +27,46 @@ namespace instantMessagingServer.Models
 
         private LogsManager()
         {
+            isEnable = (Config.Configuration["InternalLog:enable"] == "1") ? true : false;
+
             LogsQueue = new ConcurrentQueue<Logs>();
             db = new DatabaseContext(Config.Configuration);
 
-            Task.Factory.StartNew(() =>
+            if (isEnable)
             {
-                int count;
-                Logs log;
-                while (true)
+                Task.Factory.StartNew(() =>
                 {
-                    count = 0;
-                    while (LogsQueue.TryDequeue(out log) && count < 1000)
+                    int count;
+                    Logs log;
+                    while (true)
                     {
-                        ++count;
-                        db.Logs.Add(log);
+                        count = 0;
+                        while (LogsQueue.TryDequeue(out log) && count < memoryLogsSize)
+                        {
+                            ++count;
+                            db.Logs.Add(log);
+                        }
+                        db.SaveChanges();
+                        Thread.Sleep(1000);
                     }
-                    db.SaveChanges();
-                    Thread.Sleep(1000);
-                }
-            });
+                });
+            }
+
         }
 
         // Instance
+
         public void write(Logs log)
         {
-            LogsQueue.Enqueue(log);
+            if (isEnable) LogsQueue.Enqueue(log);
         }
-
+        public void write(Logs.EType type, string message)
+        {
+            write(new Logs(type, message));
+        }
+        public void write(string type, string message)
+        {
+            write(new Logs(type, message));
+        }
     }
 }
