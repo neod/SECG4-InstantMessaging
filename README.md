@@ -3,9 +3,19 @@
 Ce repository contient le travail Messagerie instantanée sécurisé de SECG4 labo.
 
 ## What the program can do
-En terme d'usage:
+En terme de fonctionnalités:
+    Le client peut s'enregistrer et se connecter. 
+    Une fois connecté l'utilisateur peut consulter sa liste d'amis.
+    Dans cette liste ce trouve tout les amis ainsi qu'une option pour ajouter un amis.
+    Pour ajouter un amis il suffit de tapper son nom.
+
+    Si vous cliquer sur un amis vous aurez 2 options, Message et Supprimer l'ami de votre liste.
 
 En terme de sécurité:
+    Au moment de s'enregistrer, le client crée une clé privé qu'il va stocker dans sa propre base de donnée.
+
+    Quand vous envoyer/recever un message, pour garder un historique ceux-ci sont encrypté et stocké sur une base de donnée
+    locale, ces messages peuvent seulement être décrypté par votre clé privé.
 
 ## Build
 
