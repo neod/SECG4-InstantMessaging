@@ -14,12 +14,14 @@ namespace instantMessagingServer.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IConfiguration Configuration;
+        private readonly Authentication authentication;
 
         private readonly LogsManager logsManager = LogsManager.GetInstance();
 
         public UsersController(IConfiguration Configuration)
         {
             this.Configuration = Configuration;
+            this.authentication = Authentication.GetInstance();
         }
 
         // PUT api/<UsersController>/Connexion
@@ -101,7 +103,7 @@ namespace instantMessagingServer.Controllers
                 }
                 else
                 {
-                    if(PasswordUtils.CheckPolicy(user.Username, user.Password))
+                    if (PasswordUtils.CheckPolicy(user.Username, user.Password))
                     {
                         var salt = PasswordUtils.getSalt();
                         var newUser = new Users(user.Username, PasswordUtils.hashAndSalt(user.Password, salt), salt);
@@ -122,7 +124,7 @@ namespace instantMessagingServer.Controllers
                         response = Unauthorized("PASSWORD_POLICY: the password must be between 8 and 255 characters long" +
                             ", have a capital letter, a lowercase letter, a special character and a number");
                     }
-                    
+
                 }
             }
             else
@@ -133,5 +135,44 @@ namespace instantMessagingServer.Controllers
             return response;
         }
 
+        [HttpGet("UserById")]
+        public IActionResult getUserById(int friendId)
+        {
+            IActionResult response = Unauthorized();
+
+            var ClaimIDToken = User.Claims.FirstOrDefault((c) => c.Type == "IDToken");
+            if (ClaimIDToken != null && authentication.isAutheticate(User.Identity.Name, ClaimIDToken))
+            {
+                DatabaseContext db = new(Configuration);
+                var currentUser = db.Users.FirstOrDefault(u => u.Username == User.Identity.Name);
+
+                if (db.Friends.Any(f =>
+                     (f.UserId == currentUser.Id && f.FriendId == friendId) ||
+                     (f.UserId == friendId && f.FriendId == currentUser.Id)
+                ))
+                {
+                    var friend = db.Users.FirstOrDefault(u => u.Id == friendId);
+                    if (friend != null)
+                    {
+                        response = Ok(friend.Username);
+                    }
+                    else
+                    {
+                        logsManager.write(Logs.EType.info, $"function: {nameof(getUserById)}, error: key {nameof(NotFound)}, User: {User.Identity.Name} token, FriendId: {friendId}");
+                        response = NotFound();
+                    }
+                }
+                else
+                {
+                    logsManager.write(Logs.EType.warning, $"function: {nameof(getUserById)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token, FriendId: {friendId}");
+                }
+            }
+            else
+            {
+                logsManager.write(Logs.EType.warning, $"function: {nameof(getUserById)}, error: {nameof(Unauthorized)}, User: {User.Identity.Name} token");
+            }
+
+            return response;
+        }
     }
 }
