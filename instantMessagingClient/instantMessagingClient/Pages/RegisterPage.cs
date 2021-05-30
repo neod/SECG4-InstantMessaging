@@ -14,6 +14,9 @@ namespace instantMessagingClient.Pages
 {
     public class RegisterPage : Page
     {
+        /// <summary>
+        /// Page where the registration happens
+        /// </summary>
         public RegisterPage()
         {
             ConsoleHelpers.Write(ConsoleColor.Yellow, "Register");
@@ -38,8 +41,9 @@ namespace instantMessagingClient.Pages
                 } while (username == null);
                 Console.WriteLine();
 
+                //make a request to register
                 response = rest.Inscription(username, password);
-
+                //if the registration failed, ask again
                 if (response is {IsSuccessful: false})
                 {
                     ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
@@ -56,6 +60,7 @@ namespace instantMessagingClient.Pages
                     Application.GoTo<Home>();
                 }
 
+                //if the registration was successfull put the received token in our session
                 if (response != null)
                 {
                     var responseContent = response.Content;
@@ -66,6 +71,8 @@ namespace instantMessagingClient.Pages
                 Session.sessionPassword = password;
                 Session.sessionUsername = username;
 
+                //Generate a new private and public key, store the public key on the server and store the private one in our local
+                //database
                 RSAManager myKeys = new RSAManager();
                 IRestResponse publicKeyResponse = rest.postKey(myKeys.GetKey(false));
                 if (publicKeyResponse is {IsSuccessful: true})

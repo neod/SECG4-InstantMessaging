@@ -40,6 +40,7 @@ namespace instantMessagingClient.Pages
                 } while (username == null);
                 Console.WriteLine();
 
+                //API call to login, if successfull get the token and put it in our session
                 response = rest.Login(username, password);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {

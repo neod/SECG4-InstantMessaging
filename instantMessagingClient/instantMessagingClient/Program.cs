@@ -3,11 +3,17 @@ using System.Security;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
 using instantMessagingClient.Pages;
+using Microsoft.Extensions.Configuration;
 
 namespace instantMessagingClient
 {
     internal class Program
     {
+        /// <summary>
+        /// Reads the console input and puts it in a securestring
+        /// </summary>
+        /// <param name="displayMessage">A message to print before the console read.</param>
+        /// <returns>Securestring</returns>
         public static SecureString getPasswordFromConsole(string displayMessage)
         {
             SecureString pass = new SecureString();
@@ -36,6 +42,7 @@ namespace instantMessagingClient
 
         private static void Main(string[] args)
         {
+            
             ConsoleSettings.DefaultColor = ConsoleColor.White;
             Application.GoTo<Home>();
         }

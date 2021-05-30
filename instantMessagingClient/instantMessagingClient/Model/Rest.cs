@@ -6,11 +6,13 @@ using EasyConsoleApplication;
 using instantMessagingClient.JsonRest;
 using instantMessagingClient.Pages;
 using instantMessagingCore.Models.Dto;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace instantMessagingClient.Model
 {
+    //Our class that handles all API calls
     internal class Rest
     {
         private readonly RestClient client;
@@ -18,7 +20,11 @@ namespace instantMessagingClient.Model
 
         public Rest()
         {
-            this.client = new RestClient("https://localhost:44307");
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("config.json")
+                .Build();
+
+            this.client = new RestClient(configuration["host"]);
             client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
@@ -69,6 +75,10 @@ namespace instantMessagingClient.Model
             return connected;
         }
 
+        /// <summary>
+        /// Checks if the user token is still valid, if not update it
+        /// </summary>
+        /// <returns>True if the token is valid</returns>
         private static bool isValid()
         {
             if (updateToken()) return true;

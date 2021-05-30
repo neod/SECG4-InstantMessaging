@@ -81,6 +81,8 @@ InstantMessagingClient:
     -Newtonsoft.Json
     -Microsoft.EntityFrameworkCore.Tools
     -Microsoft.EntityFrameworkCore.Sqlite
+    -Microsoft.Extensions.Configuration
+    -Microsoft.Extensions.Configuration.Json
 
 ### Build process
 TODO
