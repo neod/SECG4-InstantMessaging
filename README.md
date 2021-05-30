@@ -67,25 +67,48 @@ En terme de sécurité:
 13. Are my general security features misconfigured (cf. OWASP 10)?
 
 
-### Dependencies
+## Dependencies
+This application work with .NET 5 framework and Entity Framework core tools.
+
+### To install .NET 5 SDK with SNAP
+
+```
+sudo snap install dotnet-sdk --classic --channel=5.0
+```
+
+### To install EF core tools
+
+```
+dotnet tool install --global dotnet-ef --version 5.0.6
+```
+
+### Nuget package
 InstantMessagingServer:
-    -Swashbuckle.AspNetCore
-    -Microsoft.VisualStudio.Web.CodeGeneration.Design
-    -Microsoft.EntityFrameworkCore.Tools
-    -Microsoft.EntityFrameworkCore.Sqlite
-    -Microsoft.AspNetCore.Authentication.JwtBearer
+
+    - Swashbuckle.AspNetCore
+    - Microsoft.VisualStudio.Web.CodeGeneration.Design
+    - Microsoft.EntityFrameworkCore.Tools
+    - Microsoft.EntityFrameworkCore.Sqlite
+    - Microsoft.AspNetCore.Authentication.JwtBearer
 
 InstantMessagingClient:
-    -SimpleTCP.Core
-    -RestSharp
-    -Newtonsoft.Json
-    -Microsoft.EntityFrameworkCore.Tools
-    -Microsoft.EntityFrameworkCore.Sqlite
-    -Microsoft.Extensions.Configuration
-    -Microsoft.Extensions.Configuration.Json
 
-### Build process
-TODO
+    - SimpleTCP.Core
+    - RestSharp
+    - Newtonsoft.Json
+    - Microsoft.EntityFrameworkCore.Tools
+    - Microsoft.EntityFrameworkCore.Sqlite
+    - Microsoft.Extensions.Configuration
+    - Microsoft.Extensions.Configuration.Json
+
+## Build process
+InstantMessagingServer:
+
+run `make` in /instantMessagingServer directory
+
+InstantMessagingClient:
+
+run `make` in /instantMessagingClient directory
 
 ## Usage
 Client: il y a une config (config.json) pour le host.
