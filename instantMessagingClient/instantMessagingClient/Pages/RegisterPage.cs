@@ -46,7 +46,10 @@ namespace instantMessagingClient.Pages
                 //if the registration failed, ask again
                 if (response is {IsSuccessful: false})
                 {
-                    ConsoleHelpers.WriteRed("There was an error, make sure the username doesn't already exists or the password isn't empty.");
+                    ConsoleHelpers.WriteRed(response.Content.Contains("PASSWORD_POLICY")
+                        ? response.Content
+                        : "There was an error, make sure the username doesn't already exists, the password isn't empty.");
+
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         ConsoleHelpers.WriteRed(response.Content);

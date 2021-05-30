@@ -88,7 +88,7 @@ InstantMessagingClient:
 TODO
 
 ## Usage
-TODO
+Client: il y a une config (config.json) pour le host.
 
 ## Auteurs
 -**54024 Arno Pierre Pion**
