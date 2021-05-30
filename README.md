@@ -1,6 +1,6 @@
-# Messagerie instantanée sécurisé
+# Secure instant messaging
 
-Ce repository contient le travail Messagerie instantanée sécurisé de SECG4 labo.
+This repository contains the Secure Instant Messaging work of SECG4 labo.
 
 ## What the program can do
 En terme de fonctionnalités:
@@ -33,40 +33,6 @@ En terme de sécurité:
 
     //TODO Expliquer les sécu serveur
 
-
-## Check-list TODO
-1. Do I properly ensure confidentiality?
-    • Are sensitive data transmitted and stored properly?
-        Yes data is safely transfered with a bearer token.
-        Messages are encrypted before sending them.
-    • Are sensitive requests sent to the server transmitted securely?
-        Yes
-2. Do I properly ensure integrity of stored data?
-    The server check for the integrity.
-3. Do I properly ensure non-repudiation?
-
-4. Do my security features rely on secrecy, beyond cryptographic keys and access codes?
-    No
-5. Am I vulnerable to injection?
-    • URL, SQL, Javascript and dedicated parser injections
-    No
-6. Am I vulnerable to data remanence attacks?
-
-7. Am I vulnerable to fraudulent request forgery?
-
-8. Am I monitoring enough user activity so that I can detect malicious intents, or analyse an attack a posteriori?
-
-9. Am I using components with know vulnerabilities?
-
-10. Is my system updated?
-    Yes we're using .NET CORE 5
-11. Is my access control broken (cf. OWASP 10)?
-
-12. Is my authentication broken (cf. OWASP 10)?
-
-13. Are my general security features misconfigured (cf. OWASP 10)?
-
-
 ## Dependencies
 This application work with .NET 5 framework and Entity Framework core tools.
 
@@ -85,21 +51,21 @@ dotnet tool install --global dotnet-ef --version 5.0.6
 ### Nuget package (installed with make command)
 InstantMessagingServer:
 
-    - Swashbuckle.AspNetCore
-    - Microsoft.VisualStudio.Web.CodeGeneration.Design
-    - Microsoft.EntityFrameworkCore.Tools
-    - Microsoft.EntityFrameworkCore.Sqlite
-    - Microsoft.AspNetCore.Authentication.JwtBearer
+- Swashbuckle.AspNetCore
+- Microsoft.VisualStudio.Web.CodeGeneration.Design
+- Microsoft.EntityFrameworkCore.Tools
+- Microsoft.EntityFrameworkCore.Sqlite
+- Microsoft.AspNetCore.Authentication.JwtBearer
 
 InstantMessagingClient:
 
-    - SimpleTCP.Core
-    - RestSharp
-    - Newtonsoft.Json
-    - Microsoft.EntityFrameworkCore.Tools
-    - Microsoft.EntityFrameworkCore.Sqlite
-    - Microsoft.Extensions.Configuration
-    - Microsoft.Extensions.Configuration.Json
+- SimpleTCP.Core
+- RestSharp
+- Newtonsoft.Json
+- Microsoft.EntityFrameworkCore.Tools
+- Microsoft.EntityFrameworkCore.Sqlite
+- Microsoft.Extensions.Configuration
+- Microsoft.Extensions.Configuration.Json
 
 ## Build process
 InstantMessagingServer:
@@ -111,7 +77,24 @@ InstantMessagingClient:
 run `make` in /instantMessagingClient directory
 
 ## Usage
-Client: il y a une config (config.json) pour le host.
+### InstantMessagingServer:
+
+Launche the server with
+```
+dotnet run --project /instantMessagingServer/instantMessagingServer
+```
+
+You can configure token key, token validity duration and connection string in
+`/instantMessagingServer/instantMessagingServer/appsettings.json`
+
+### InstantMessagingClient:
+
+You have to configure the serveur adresse and port in `/instantMessagingClient/instantMessagingClient/config.json`
+
+Launche the client with
+```
+dotnet run --project /instantMessagingClient/instantMessagingClient
+```
 
 ## Auteurs
 -**54024 Arno Pierre Pion**
