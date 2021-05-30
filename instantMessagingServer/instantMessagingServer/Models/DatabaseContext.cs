@@ -27,11 +27,11 @@ namespace instantMessagingServer.Models
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // SQLLite
-            options.UseSqlite(Configuration.GetConnectionString("sqlite"));
+            //options.UseSqlite(Configuration.GetConnectionString("sqlite"));
 
             // MariaDB/MySQL
             string connectionString = Configuration.GetConnectionString("sql");
-            //options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

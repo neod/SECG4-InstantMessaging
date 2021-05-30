@@ -10,11 +10,13 @@ namespace instantMessagingClient.Pages
     public class Notification : Page
     {
         private static int _ID;
+        private static string name;
         public Notification(int ID, string friendName)
         {
             _ID = ID;//user ID that wants to be friend
+            name = friendName;
 
-            Title = friendName;
+            Title = name;
             TitleColor = ConsoleColor.Green;
             Body = "-----";
             MenuItems.Add(new MenuItem("Accept", Accept));
@@ -33,7 +35,7 @@ namespace instantMessagingClient.Pages
             {
                 if (reply.IsSuccessful)
                 {
-                    ConsoleHelpers.WriteGreen("Successfully added UserId" + _ID);
+                    ConsoleHelpers.WriteGreen("Successfully added " + name);
                     ConsoleHelpers.HitEnterToContinue();
                 }
                 else
@@ -64,7 +66,7 @@ namespace instantMessagingClient.Pages
                 {
                     if (reply.IsSuccessful)
                     {
-                        ConsoleHelpers.WriteGreen("Successfully declined UserId" + _ID);
+                        ConsoleHelpers.WriteGreen("Successfully declined " + name);
                         ConsoleHelpers.HitEnterToContinue();
                     }
                     else
