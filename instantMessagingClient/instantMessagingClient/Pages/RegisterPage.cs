@@ -83,7 +83,7 @@ namespace instantMessagingClient.Pages
                     var myPrivateKey = myKeys.GetKey(true);
                     DatabaseContext db = new DatabaseContext();
                     MyKey key = new MyKey(Session.tokens.UserId, myPrivateKey);
-                    db.myKey.Add(key);
+                    db.MyKey.Add(key);
                     db.SaveChanges();
                     ConsoleHelpers.WriteGreen("Successfully registered " + username + "!");
                 }

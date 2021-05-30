@@ -8,7 +8,7 @@ using instantMessagingClient.Database;
 namespace instantMessagingClient.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210529150600_init")]
+    [Migration("20210530144359_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace instantMessagingClient.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("myKey");
+                    b.ToTable("MyKey");
                 });
 
             modelBuilder.Entity("instantMessagingClient.Database.MyMessages", b =>

@@ -6,7 +6,7 @@ namespace instantMessagingClient.Database
     {
         public DbSet<MyMessages> MyMessages { get; set; }
 
-        public DbSet<MyKey> myKey { get; set; }
+        public DbSet<MyKey> MyKey { get; set; }
         
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {

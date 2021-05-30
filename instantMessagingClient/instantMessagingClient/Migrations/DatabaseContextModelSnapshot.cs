@@ -29,7 +29,7 @@ namespace instantMessagingClient.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("myKey");
+                    b.ToTable("MyKey");
                 });
 
             modelBuilder.Entity("instantMessagingClient.Database.MyMessages", b =>

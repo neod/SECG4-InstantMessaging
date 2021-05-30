@@ -7,7 +7,7 @@ namespace instantMessagingClient.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "myKey",
+                name: "MyKey",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -17,7 +17,7 @@ namespace instantMessagingClient.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_myKey", x => x.Id);
+                    table.PrimaryKey("PK_MyKey", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,7 +38,7 @@ namespace instantMessagingClient.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "myKey");
+                name: "MyKey");
 
             migrationBuilder.DropTable(
                 name: "MyMessages");
