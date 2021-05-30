@@ -51,21 +51,22 @@ dotnet tool install --global dotnet-ef --version 5.0.6
 ### Nuget package (installed with make command)
 InstantMessagingServer:
 
-- Swashbuckle.AspNetCore
-- Microsoft.VisualStudio.Web.CodeGeneration.Design
-- Microsoft.EntityFrameworkCore.Tools
-- Microsoft.EntityFrameworkCore.Sqlite
-- Microsoft.AspNetCore.Authentication.JwtBearer
+- [Swashbuckle.AspNetCore](https://www.nuget.org/packages/Swashbuckle.AspNetCore/6.1.4?_src=template)
+- [Microsoft.VisualStudio.Web.CodeGeneration.Design](https://www.nuget.org/packages/Microsoft.VisualStudio.Web.CodeGeneration.Design/5.0.2?_src=template)
+- [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/5.0.6?_src=template)
+- [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/5.0.6?_src=template)
+- [Microsoft.AspNetCore.Authentication.JwtBearer](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/5.0.6?_src=template)
 
 InstantMessagingClient:
 
-- SimpleTCP.Core
-- RestSharp
-- Newtonsoft.Json
-- Microsoft.EntityFrameworkCore.Tools
-- Microsoft.EntityFrameworkCore.Sqlite
-- Microsoft.Extensions.Configuration
-- Microsoft.Extensions.Configuration.Json
+- [SimpleTCP.Core](https://www.nuget.org/packages/SimpleTCP.Core/1.0.4?_src=template)
+- [RestSharp](https://www.nuget.org/packages/RestSharp/106.11.7?_src=template)
+- [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json/13.0.1?_src=template)
+- [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/5.0.6?_src=template)
+- [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/5.0.6?_src=template)
+- [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration/5.0.0?_src=template)
+- [Microsoft.Extensions.Configuration.Json](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json/5.0.0?_src=template)
+- [EasyConsoleApplication](https://www.nuget.org/packages/EasyConsoleApplication/0.4.0?_src=template)
 
 ## Build process
 InstantMessagingServer:
