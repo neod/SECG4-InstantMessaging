@@ -119,7 +119,7 @@ namespace instantMessagingServer.Controllers
                     }
                     else
                     {
-                        response = Unauthorized("the password must be between 8 and 255 characters long" +
+                        response = Unauthorized("PASSWORD_POLICY: the password must be between 8 and 255 characters long" +
                             ", have a capital letter, a lowercase letter, a special character and a number");
                     }
                     
