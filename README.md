@@ -12,14 +12,20 @@ En terme de fonctionnalités:
     Si vous cliquer sur un amis vous aurez 2 options, Message et Supprimer l'ami de votre liste.
 
 En terme de sécurité:
-Sur le client:
     Au moment de s'enregistrer, le client crée une clé privé qu'il va stocker dans sa propre base de donnée.
+    Le nom d'utilisateur, le mot de passe hashé + salté et la clé publique est stocké sur la base de donnée du serveur.
+    Un token est généré avec une date d'expiration.
+
+    A chaque connection le token de l'utilisateur est mis a jour.
+
+    A partir de la tout les appel API vérifient d'abord si le token est toujours valable pour empécher le vol de token.
+    Si celui-ci est expiré une nouvel connection est créee et mets a jour le token.
+    Pour chaque appel API nous ajoutons une authentification avec ce token. Le token est vérifié sur le serveur pour
+    voir si les informations n'ont pas été modifiés.
 
     Quand vous envoyer/recever un message, pour garder un historique ceux-ci sont encrypté et stocké sur une base de donnée
     locale, ces messages peuvent seulement être décrypté par votre clé privé.
 
-Sur le serveur:
-    
 
 ## Build
 
