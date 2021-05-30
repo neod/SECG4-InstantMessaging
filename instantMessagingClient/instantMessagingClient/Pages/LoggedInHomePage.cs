@@ -85,6 +85,8 @@ namespace instantMessagingClient.Pages
             Session.tokens = null;
             Session.communication = null;
             Session.isOnMessagingPage = false;
+            Session.maKey = null;
+            Session.hasAlreadyStarted = false;
             Heartbeat.getInstance().stop();
             Application.GoTo<Home>();
         }

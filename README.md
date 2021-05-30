@@ -12,10 +12,14 @@ En terme de fonctionnalités:
     Si vous cliquer sur un amis vous aurez 2 options, Message et Supprimer l'ami de votre liste.
 
 En terme de sécurité:
+Sur le client:
     Au moment de s'enregistrer, le client crée une clé privé qu'il va stocker dans sa propre base de donnée.
 
     Quand vous envoyer/recever un message, pour garder un historique ceux-ci sont encrypté et stocké sur une base de donnée
     locale, ces messages peuvent seulement être décrypté par votre clé privé.
+
+Sur le serveur:
+    
 
 ## Build
 
