@@ -20,11 +20,20 @@ En terme de sécurité:
 
     A partir de la tout les appel API vérifient d'abord si le token est toujours valable pour empécher le vol de token.
     Si celui-ci est expiré une nouvel connection est créee et mets a jour le token.
-    Pour chaque appel API nous ajoutons une authentification avec ce token. Le token est vérifié sur le serveur pour
+    Pour chaque appel API nous ajoutons une authentification avec ce token (bearer). Le token est vérifié sur le serveur pour
     voir si les informations n'ont pas été modifiés.
+
+    Il y a un système de heartbeat
+    //TODO EXPLIQUER HEARTBEAT
 
     Quand vous envoyer/recever un message, pour garder un historique ceux-ci sont encrypté et stocké sur une base de donnée
     locale, ces messages peuvent seulement être décrypté par votre clé privé.
+
+    Lors de l'envoi nous encryptons le message avec la clé publique du récepteur, les messages encrypté sont envoyés.
+
+    //TODO Expliquer les sécu serveur
+
+
 
 
 ## Build
