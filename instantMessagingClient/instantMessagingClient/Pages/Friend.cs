@@ -11,14 +11,14 @@ namespace instantMessagingClient.Pages
     {
         private static int _ID;
 
-        public Friend(int ID)
+        public Friend(int ID, string friendName)
         {
             _ID = ID;
 
-            Title = "Friend" + _ID;
+            Title = friendName;
             TitleColor = ConsoleColor.Green;
             Body = "-----";
-            MenuItems.Add(new MenuItem("Message", () => Application.GoTo<MessageFriend>(_ID)));
+            MenuItems.Add(new MenuItem("Message", () => Application.GoTo<MessageFriend>(_ID, friendName)));
             MenuItems.Add(new MenuItem("Delete from friendlist", DeleteFriend)
             {
                 Color = ConsoleColor.Red

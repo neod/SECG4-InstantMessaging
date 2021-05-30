@@ -10,11 +10,11 @@ namespace instantMessagingClient.Pages
     public class Notification : Page
     {
         private static int _ID;
-        public Notification(int ID)
+        public Notification(int ID, string friendName)
         {
             _ID = ID;//user ID that wants to be friend
 
-            Title = "UserId: " + _ID;
+            Title = friendName;
             TitleColor = ConsoleColor.Green;
             Body = "-----";
             MenuItems.Add(new MenuItem("Accept", Accept));

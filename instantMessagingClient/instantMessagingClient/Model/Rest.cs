@@ -218,6 +218,20 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        public IRestResponse getUserById(int id)
+        {
+            IRestResponse rep = null;
+            if (isValid())
+            {
+                this.request = new RestRequest("/api/Users/UserById/{friendId}", Method.GET);
+                request.AddUrlSegment("friendId", id);
+                request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
+                rep = this.client.Get(this.request);
+            }
+
+            return rep;
+        }
+
         public void sendHeartbeat()
         {
             if (isValid())

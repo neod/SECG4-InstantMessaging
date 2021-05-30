@@ -11,7 +11,7 @@ namespace instantMessagingClient.Pages
 {
     public class MessageFriend : Page
     {
-        public MessageFriend(int ID)
+        public MessageFriend(int ID, string friendName)
         {
             Session.isOnMessagingPage = true;
 
@@ -27,7 +27,7 @@ namespace instantMessagingClient.Pages
             friendsPublicKeys.ToStringNormal();
             Peers friendPeer = JsonConvert.DeserializeObject<Peers>(responsePeers.Content);
 
-            CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys);
+            CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys, friendName);
 
             Session.communication.friendsHost = friendPeer.Ipv4;
             Session.communication.friendsPort = Convert.ToString((int)friendPeer.Port);

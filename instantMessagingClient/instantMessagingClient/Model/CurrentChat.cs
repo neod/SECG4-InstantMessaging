@@ -25,7 +25,9 @@ namespace instantMessagingClient.Model
         public RSAManager hisManager { get; set; }
         public RSAManager myManager { get; set; }
 
-        public CurrentChat(int friendID, string backCommand, postKey pkFriend)
+        public string friendName { get; set; }
+
+        public CurrentChat(int friendID, string backCommand, postKey pkFriend, string friendName)
         {
             this.friendID = friendID;
             this.backCommand = backCommand;
@@ -34,6 +36,7 @@ namespace instantMessagingClient.Model
             this.pkFriend = pkFriend;
             this.hisManager = new RSAManager(pkFriend.Key);
             this.myManager = new RSAManager(Session.maKey.Key);
+            this.friendName = friendName;
         }
         
         public void readLine()
@@ -73,7 +76,7 @@ namespace instantMessagingClient.Model
                 }
                 else
                 {
-                    Console.Write("UserId" + friendID + " said: ");
+                    Console.Write(this.friendName + " said: ");
                     var text = this.myManager.Decrypt(Convert.FromBase64String(m.message));
                     Console.WriteLine(Encoding.UTF8.GetString(text));
                 }

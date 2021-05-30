@@ -30,18 +30,16 @@ namespace instantMessagingClient.Pages
 
             //for amis
             var reponseMyFriends = rest.getMyFriendList();
-            if (reponseMyFriends != null)
+            if (reponseMyFriends is {IsSuccessful: true})
             {
-                if (reponseMyFriends.IsSuccessful)
+                Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseMyFriends.Content);
+                if (FriendList != null)
                 {
-                    Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseMyFriends.Content);
-                    if (FriendList != null)
+                    foreach (Friends friend in FriendList)
                     {
-                        foreach (Friends friend in FriendList)
-                        {
-                            var friendUserId = friend.UserId == Session.tokens.UserId ? friend.FriendId : friend.UserId;
-                            MenuItems.Add(new MenuItem("Friend" + friendUserId, () => Application.GoTo<Friend>(friendUserId)));
-                        }
+                        var friendUserId = friend.UserId == Session.tokens.UserId ? friend.FriendId : friend.UserId;
+                        var rep = rest.getUserById(friendUserId);
+                        MenuItems.Add(new MenuItem(rep.Content, () => Application.GoTo<Friend>(friendUserId, rep.Content)));
                     }
                 }
             }
@@ -57,8 +55,9 @@ namespace instantMessagingClient.Pages
                     {
                         foreach (Friends friend in FriendList)
                         {
-                            MenuItems.Add(new MenuItem("UserId: " + friend.UserId + " wants to add you.",
-                                () => Application.GoTo<Notification>(friend.UserId))
+                            var rep = rest.getUserById(friend.UserId);
+                            MenuItems.Add(new MenuItem(rep.Content + " wants to add you.",
+                                () => Application.GoTo<Notification>(friend.UserId, rep.Content))
                             {
                                 Color = ConsoleColor.Green
                             });
