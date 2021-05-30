@@ -82,7 +82,7 @@ sudo snap install dotnet-sdk --classic --channel=5.0
 dotnet tool install --global dotnet-ef --version 5.0.6
 ```
 
-### Nuget package
+### Nuget package (installed with make command)
 InstantMessagingServer:
 
     - Swashbuckle.AspNetCore
