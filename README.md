@@ -3,12 +3,26 @@
 Ce repository contient le travail Messagerie instantanée sécurisé de SECG4 labo.
 
 ## What the program can do
-TODO
+En terme d'usage:
+
+En terme de sécurité:
 
 ## Build
 
-### Dependency
+### Dependencies
+InstantMessagingServer:
+    -Swashbuckle.AspNetCore
+    -Microsoft.VisualStudio.Web.CodeGeneration.Design
+    -Microsoft.EntityFrameworkCore.Tools
+    -Microsoft.EntityFrameworkCore.Sqlite
+    -Microsoft.AspNetCore.Authentication.JwtBearer
 
+InstantMessagingClient:
+    -SimpleTCP.Core
+    -RestSharp
+    -Newtonsoft.Json
+    -Microsoft.EntityFrameworkCore.Tools
+    -Microsoft.EntityFrameworkCore.Sqlite
 
 ### Build process
 TODO
