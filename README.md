@@ -34,7 +34,7 @@ En terme de sécurité:
     //TODO Expliquer les sécu serveur
 
 ## Dependencies
-This application work with .NET 5 framework and Entity Framework core tools.
+This application work with .NET 5 framework, Entity Framework core tools and MariaDB/MySQL server.
 
 ### To install .NET 5 SDK with SNAP
 
@@ -48,6 +48,13 @@ sudo snap install dotnet-sdk --classic --channel=5.0
 dotnet tool install --global dotnet-ef --version 5.0.6
 ```
 
+### To configure Database (MariaDB or MySQL)
+You can modify the connection string in `/instantMessagingServer/instantMessagingServer/appsettings.json`
+
+```
+"sql": "server=[ADDRESS];user=[USER];password=[PASSWORD];database=[DATABASE]"
+``` 
+
 ### Nuget package (installed with make command)
 InstantMessagingServer:
 
@@ -56,6 +63,7 @@ InstantMessagingServer:
 - [Microsoft.EntityFrameworkCore.Tools](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools/5.0.6?_src=template)
 - [Microsoft.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Sqlite/5.0.6?_src=template)
 - [Microsoft.AspNetCore.Authentication.JwtBearer](https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer/5.0.6?_src=template)
+- [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/5.0.0?_src=template)
 
 InstantMessagingClient:
 
@@ -82,7 +90,7 @@ run `make` in /instantMessagingClient directory
 
 Launche the server with
 ```
-dotnet run --project /instantMessagingServer/instantMessagingServer
+dotnet run --project instantMessagingServer/instantMessagingServer
 ```
 
 You can configure token key, token validity duration and connection string in
@@ -94,7 +102,7 @@ You have to configure the serveur adresse and port in `/instantMessagingClient/i
 
 Launche the client with
 ```
-dotnet run --project /instantMessagingClient/instantMessagingClient
+dotnet run --project instantMessagingClient/instantMessagingClient
 ```
 
 ## Auteurs
