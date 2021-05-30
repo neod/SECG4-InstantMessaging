@@ -66,6 +66,7 @@ namespace instantMessagingClient.P2P
             }
             catch (Exception e)
             {
+                ConsoleHelpers.WriteRed("Your friend isn't online.");
                 ConsoleHelpers.WriteRed(e.Message);
                 ConsoleHelpers.HitEnterToContinue();
                 Application.GoTo<FriendList>();
@@ -99,20 +100,22 @@ namespace instantMessagingClient.P2P
 
             msg.message = encodedStr;
 
-            //copy pour ma bd
-            MyMessages myMsg = new MyMessages(msg.IdEnvoyeur, myencodedStr);
-            this.db.MyMessages.Add(myMsg);
-            this.db.SaveChanges();
-
             string toSend = msg.Serialize();
             try
             {
                 myClient.Write(toSend);
+                //copy pour ma bd
+                MyMessages myMsg = new MyMessages(msg.IdEnvoyeur, myencodedStr);
+                this.db.MyMessages.Add(myMsg);
+                this.db.SaveChanges();
             }
             catch (Exception e)
             {
-                ConsoleHelpers.WriteRed("Your friend disconnected");
-                throw;
+                ConsoleHelpers.WriteRed("Your friend disconnected.");
+                ConsoleHelpers.WriteRed(e.Message);
+                ConsoleHelpers.HitEnterToContinue();
+                myClient.Disconnect();
+                Application.GoBack();
             }
             
             cm.AskUpdate(Session.tokens.UserId);

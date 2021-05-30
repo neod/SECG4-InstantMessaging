@@ -13,6 +13,10 @@ namespace instantMessagingClient.Pages
 {
     public class LoggedInHomePage : Page
     {
+        /// <summary>
+        /// Gets our public IP Address
+        /// </summary>
+        /// <returns>IPAddress</returns>
         public static IPAddress GetMyIp()
         {
             List<string> services = new List<string>()
@@ -32,6 +36,9 @@ namespace instantMessagingClient.Pages
             return null;
         }
 
+        /// <summary>
+        /// Gets our local IP
+        /// </summary>
         public static string GetLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -56,6 +63,8 @@ namespace instantMessagingClient.Pages
                 Color = ConsoleColor.Yellow
             });
 
+            //If we just logged in, post our peers info to the server and start listening to incoming messages
+            //start the heartbeat
             if (Session.hasAlreadyStarted == false)
             {
                 Rest rest = new Rest();
@@ -85,6 +94,8 @@ namespace instantMessagingClient.Pages
             Session.tokens = null;
             Session.communication = null;
             Session.isOnMessagingPage = false;
+            Session.maKey = null;
+            Session.hasAlreadyStarted = false;
             Heartbeat.getInstance().stop();
             Application.GoTo<Home>();
         }
