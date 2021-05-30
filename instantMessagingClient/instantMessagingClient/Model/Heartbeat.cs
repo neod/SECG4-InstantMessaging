@@ -20,15 +20,6 @@ namespace instantMessagingClient.Model
         private Heartbeat()
         {
             restClient = new Rest();
-            
-            hearbeatTask = new Task(() =>
-            {
-                while (isRunning)
-                {
-                    restClient.sendHeartbeat();
-                    Thread.Sleep(60_000);
-                }
-            });
         }
 
         private Rest restClient;
@@ -37,14 +28,29 @@ namespace instantMessagingClient.Model
 
         public void start()
         {
-            isRunning = true;
-            hearbeatTask.Start();
+            if(hearbeatTask == null ||
+                hearbeatTask.IsCanceled ||
+                hearbeatTask.IsFaulted ||
+                hearbeatTask.IsCompleted)
+            {
+                isRunning = true;
+                hearbeatTask = new Task(() =>
+                {
+                    while (isRunning)
+                    {
+                        restClient.sendHeartbeat();
+                        Thread.Sleep(60_000);
+                    }
+                });
+                hearbeatTask.Start();
+            }
         }
 
         public void stop()
         {
             isRunning = false;
             hearbeatTask.Wait(1000);
+            hearbeatTask.Dispose();
         }
 
     }
