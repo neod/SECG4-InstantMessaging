@@ -23,15 +23,12 @@ En terme de sécurité:
     Pour chaque appel API nous ajoutons une authentification avec ce token (bearer). Le token est vérifié sur le serveur pour
     voir si les informations n'ont pas été modifiés.
 
-    Il y a un système de heartbeat
-    //TODO EXPLIQUER HEARTBEAT
+    Il y a un système de heartbeat.
 
     Quand vous envoyer/recever un message, pour garder un historique ceux-ci sont encrypté et stocké sur une base de donnée
     locale, ces messages peuvent seulement être décrypté par votre clé privé.
 
     Lors de l'envoi nous encryptons le message avec la clé publique du récepteur, les messages encrypté sont envoyés.
-
-    //TODO Expliquer les sécu serveur
 
 ## Dependencies
 This application work with .NET 5 framework, Entity Framework core tools and MariaDB/MySQL server.
