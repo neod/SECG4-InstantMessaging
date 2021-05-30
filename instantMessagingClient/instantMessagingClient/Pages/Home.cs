@@ -12,6 +12,7 @@ namespace instantMessagingClient.Pages
 {
     public class Home : Page
     {
+        //Home page of the program
         public Home()
         {
             Title = "Instant messaging";

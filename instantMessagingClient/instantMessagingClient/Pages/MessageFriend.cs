@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Pages;
 using instantMessagingClient.JsonRest;
@@ -18,7 +17,7 @@ namespace instantMessagingClient.Pages
             Console.Clear();
             const string backCommand = "/back";
 
-            //get public key of friend
+            //get public key & peers of friend
             Rest rest = new Rest();
             var reponse = rest.getPublicKeyFriend(ID);
             var responsePeers = rest.getPeers(ID);
@@ -27,12 +26,14 @@ namespace instantMessagingClient.Pages
             friendsPublicKeys.ToStringNormal();
             Peers friendPeer = JsonConvert.DeserializeObject<Peers>(responsePeers.Content);
 
+            //make a chat instance
             CurrentChat chat = new CurrentChat(ID, backCommand, friendsPublicKeys, friendName);
 
             Session.communication.friendsHost = friendPeer.Ipv4;
             Session.communication.friendsPort = Convert.ToString((int)friendPeer.Port);
-            Session.communication.startClient();
+            Session.communication.startClient();//start the communication with friend
 
+            //updates the chat and reads input
             chat.display();
             chat.readLine();
 

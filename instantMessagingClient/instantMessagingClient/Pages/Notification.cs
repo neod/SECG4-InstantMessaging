@@ -27,6 +27,9 @@ namespace instantMessagingClient.Pages
             });
         }
 
+        /// <summary>
+        /// Accept the friend request
+        /// </summary>
         private static void Accept()
         {
             Rest rest = new Rest();
@@ -54,6 +57,9 @@ namespace instantMessagingClient.Pages
             Application.GoTo<FriendList>();
         }
 
+        /// <summary>
+        /// Decline the friend request
+        /// </summary>
         private static void Decline()
         {
             ConsoleKeyInfo yesOrNo = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?");

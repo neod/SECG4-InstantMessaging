@@ -24,6 +24,9 @@ namespace instantMessagingClient.Pages
             });
         }
 
+        /// <summary>
+        /// Prints our friends and all incoming friend requests
+        /// </summary>
         private void PrintFriendsAndNotifications()
         {
             Rest rest = new Rest();

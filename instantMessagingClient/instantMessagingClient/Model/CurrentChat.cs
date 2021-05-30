@@ -18,11 +18,13 @@ namespace instantMessagingClient.Model
 
         public int friendID { get; set; }
 
+        //defines what string has to be entered to go back a page in the menus
         public string backCommand { get; set; }
 
+        //the public key of a friend
         public postKey pkFriend { get; set; }
-
-        public RSAManager hisManager { get; set; }
+        
+        //our rsa to encrypt and decrypt messages
         public RSAManager myManager { get; set; }
 
         public string friendName { get; set; }
@@ -34,11 +36,13 @@ namespace instantMessagingClient.Model
             this.db = new DatabaseContext();
             db.Database.EnsureCreated();
             this.pkFriend = pkFriend;
-            this.hisManager = new RSAManager(pkFriend.Key);
             this.myManager = new RSAManager(Session.maKey.Key);
             this.friendName = friendName;
         }
-        
+
+        /// <summary>
+        /// Reads the console to send a message
+        /// </summary>
         public void readLine()
         {
             isRunning = true;
@@ -61,6 +65,9 @@ namespace instantMessagingClient.Model
             });
         }
 
+        /// <summary>
+        /// Refreshes the console when a new message is received
+        /// </summary>
         public void display()
         {
             Console.SetCursorPosition(0, 0);

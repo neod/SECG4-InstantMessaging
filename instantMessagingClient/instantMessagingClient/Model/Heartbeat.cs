@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace instantMessagingClient.Model
 {
+    //send a heartbeat to the server so it knows if a user is online or not
     public class Heartbeat
     {
 
@@ -22,7 +23,7 @@ namespace instantMessagingClient.Model
             restClient = new Rest();
         }
 
-        private Rest restClient;
+        private readonly Rest restClient;
         private bool isRunning;
         private Task hearbeatTask;
 

@@ -88,6 +88,9 @@ namespace instantMessagingClient.Model
             return false;
         }
 
+        /// <summary>
+        /// Register api
+        /// </summary>
         public IRestResponse Inscription(string _username, SecureString _password)
         {
             this.request = new RestRequest("api/Users/Inscription", DataFormat.Json);
@@ -96,6 +99,9 @@ namespace instantMessagingClient.Model
             return this.client.Put(this.request);
         }
 
+        /// <summary>
+        /// Login api
+        /// </summary>
         public IRestResponse Login(string _username, SecureString _password)
         {
             this.request = new RestRequest("api/Users/Connexion", DataFormat.Json);
@@ -104,6 +110,9 @@ namespace instantMessagingClient.Model
             return this.client.Post(this.request);
         }
 
+        /// <summary>
+        /// Gets the friend list
+        /// </summary>
         public IRestResponse getMyFriendList()
         {
             IRestResponse rep = null;
@@ -117,6 +126,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Gets all friend requests
+        /// </summary>
         public IRestResponse getFriendRequests()
         {
             IRestResponse rep = null;
@@ -130,6 +142,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Sends a friend request to a user
+        /// </summary>
         public IRestResponse SendFriendRequest(string FriendName)
         {
             IRestResponse rep = null;
@@ -144,6 +159,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Add, delete friend request
+        /// </summary>
         public IRestResponse ActionFriendRequest(Friends.Action requestAction, int _ID)
         {
             IRestResponse rep = null;
@@ -159,6 +177,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Post our public key to the server
+        /// </summary>
         public IRestResponse postKey(string getKey)
         {
             IRestResponse rep = null;
@@ -175,6 +196,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Gets the public key of a specific user
+        /// </summary>
         public IRestResponse getPublicKeyFriend(int id)
         {
             IRestResponse rep = null;
@@ -189,6 +213,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Post our peers information (ip address, port)
+        /// </summary>
         public IRestResponse postPeers(Peers peer)
         {
             IRestResponse rep = null;
@@ -204,6 +231,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Gets the peers of a friend
+        /// </summary>
         public IRestResponse getPeers(int id)
         {
             IRestResponse rep = null;
@@ -218,6 +248,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Gets the name of a user by id
+        /// </summary>
         public IRestResponse getUserById(int id)
         {
             IRestResponse rep = null;
@@ -232,6 +265,9 @@ namespace instantMessagingClient.Model
             return rep;
         }
 
+        /// <summary>
+        /// Send a heart beat
+        /// </summary>
         public void sendHeartbeat()
         {
             if (isValid())

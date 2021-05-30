@@ -60,7 +60,7 @@ namespace instantMessagingClient.Pages
                 Session.sessionUsername = username;
                 DatabaseContext db = new DatabaseContext();
                 db.Database.EnsureCreated();
-                var myPrivateKey = db.MyKey.FirstOrDefault(k => k.UserId == Session.tokens.UserId);
+                var myPrivateKey = db.MyKey.FirstOrDefault(k => k.UserId == Session.tokens.UserId);//Get our private key in session
                 Session.maKey = myPrivateKey;
 
                 ConsoleHelpers.WriteGreen("Successfully logged in " + username + "!");

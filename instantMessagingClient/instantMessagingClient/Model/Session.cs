@@ -11,8 +11,10 @@ using Newtonsoft.Json;
 
 namespace instantMessagingClient.Model
 {
+    //session class used to access data using in the current user session
     public static class Session
     {
+        //contains the token & user id of the session
         public static Tokens tokens { get; set; }
 
         public static string sessionUsername { get; set; }
@@ -21,9 +23,10 @@ namespace instantMessagingClient.Model
 
         public static bool isOnMessagingPage { get; set; }
 
+        //the communication object
         public static TCP communication { get; set; }
 
-        //juste pour test
+        //our private key
         public static MyKey maKey { get; set; }
 
         public static bool hasAlreadyStarted { get; set; }

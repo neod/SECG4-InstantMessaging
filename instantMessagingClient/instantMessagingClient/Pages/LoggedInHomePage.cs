@@ -87,6 +87,9 @@ namespace instantMessagingClient.Pages
             Application.GoTo<FriendList>();
         }
 
+        /// <summary>
+        /// Disconnects
+        /// </summary>
         public static void clickDisconnect()
         {
             Session.sessionPassword = null;

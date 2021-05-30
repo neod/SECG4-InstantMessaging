@@ -29,6 +29,9 @@ namespace instantMessagingClient.Pages
             });
         }
 
+        /// <summary>
+        /// Delete the specific friend
+        /// </summary>
         private static void DeleteFriend()
         {
             ConsoleKeyInfo yesOrNo = ConsoleHelpers.AskToUserYesNoQuestion(ConsoleColor.Red, "Are you sure about that?");

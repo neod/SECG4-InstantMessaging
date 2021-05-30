@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace instantMessagingClient.Database
 {
+    //Stores the private key in the local database
     public class MyKey
     {
         public int Id { get; set; }

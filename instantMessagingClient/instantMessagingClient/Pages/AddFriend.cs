@@ -9,7 +9,7 @@ namespace instantMessagingClient.Pages
     public class AddFriend : Page
     {
         public AddFriend()
-        {//TODO: check si deja une requete, si l'ami ta ajouté que toi tu l'ajoute pas
+        {
             ConsoleHelpers.WriteGreen("If you want to go back, type '/back'");
             const string backCommand = "/back";
             string Name;

@@ -7,25 +7,29 @@ using instantMessagingClient.JsonRest;
 using instantMessagingClient.Model;
 using instantMessagingClient.Pages;
 using instantMessagingCore.Crypto;
-using instantMessagingCore.Models.Dto;
 using SimpleTCP;
 
 namespace instantMessagingClient.P2P
 {
     public class TCP
     {
+        //access to our database
         public DatabaseContext db { get; set; }
 
+        //our ip address
         public string myHost { get; set; }
 
         public string myPort { get; set; }
 
+        //the ip address of the friend
         public string friendsHost { get; set; }
 
         public string friendsPort { get; set; }
 
+        //our tcp client to send messages
         public SimpleTcpClient myClient { get; set; }
 
+        //the tcp server to receive messages
         public SimpleTcpServer myServer { get; set; } 
 
         private readonly ChatManager cm = ChatManager.getInstance();
@@ -47,6 +51,9 @@ namespace instantMessagingClient.P2P
             myServer.Stop();
         }
 
+        /// <summary>
+        /// Starts listening to incoming messages
+        /// </summary>
         public bool startListener()
         {
             myServer = new SimpleTcpServer { Delimiter = 0x13, StringEncoder = Encoding.UTF8 };
@@ -58,6 +65,9 @@ namespace instantMessagingClient.P2P
             return myServer.IsStarted;
         }
 
+        /// <summary>
+        /// starts the client to be able to send messages
+        /// </summary>
         public void startClient()
         {
             myClient = new SimpleTcpClient { StringEncoder = Encoding.UTF8 };
@@ -75,6 +85,9 @@ namespace instantMessagingClient.P2P
             }
         }
 
+        /// <summary>
+        /// On message received, add it to the local db
+        /// </summary>
         private void Message_Received(object sender, Message e)
         {
             MyMessages msg = e.MessageString.Deserialize<MyMessages>();
@@ -84,6 +97,9 @@ namespace instantMessagingClient.P2P
             cm.AskUpdate(msg.IdEnvoyeur);
         }
 
+        /// <summary>
+        /// On message send, encrypt it, add it to the local db and send it
+        /// </summary>
         public void sendMessage(MyMessages msg, postKey friendKey)
         {
             RSAManager rsaFriend = new RSAManager(friendKey.Key);

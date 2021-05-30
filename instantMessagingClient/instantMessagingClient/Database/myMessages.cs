@@ -1,5 +1,6 @@
 ﻿namespace instantMessagingClient.Database
 {
+    //used when sending/receiving messages
     public class MyMessages
     {
         public int Id { get; set; }
