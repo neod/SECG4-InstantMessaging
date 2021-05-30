@@ -135,7 +135,7 @@ namespace instantMessagingServer.Controllers
             return response;
         }
 
-        [HttpGet("UserById")]
+        [HttpGet("UserById/{friendId}")]
         public IActionResult getUserById(int friendId)
         {
             IActionResult response = Unauthorized();
