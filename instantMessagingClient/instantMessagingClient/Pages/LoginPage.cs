@@ -59,6 +59,7 @@ namespace instantMessagingClient.Pages
                 Session.sessionPassword = password;
                 Session.sessionUsername = username;
                 DatabaseContext db = new DatabaseContext();
+                db.Database.EnsureCreated();
                 var myPrivateKey = db.MyKey.FirstOrDefault(k => k.UserId == Session.tokens.UserId);
                 Session.maKey = myPrivateKey;
 

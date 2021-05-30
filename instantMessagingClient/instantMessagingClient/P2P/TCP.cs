@@ -35,6 +35,7 @@ namespace instantMessagingClient.P2P
             this.myHost = myHost;
             this.myPort = myPort;//8910
             db = new DatabaseContext();
+            db.Database.EnsureCreated();
         }
 
         public void Deconstruct(out SimpleTcpClient myClient, out SimpleTcpServer myServer)

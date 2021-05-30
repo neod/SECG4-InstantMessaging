@@ -30,6 +30,7 @@ namespace instantMessagingClient.Model
             this.friendID = friendID;
             this.backCommand = backCommand;
             this.db = new DatabaseContext();
+            db.Database.EnsureCreated();
             this.pkFriend = pkFriend;
             this.hisManager = new RSAManager(pkFriend.Key);
             this.myManager = new RSAManager(Session.maKey.Key);
