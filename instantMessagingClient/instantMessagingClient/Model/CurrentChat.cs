@@ -51,7 +51,7 @@ namespace instantMessagingClient.Model
                     Session.communication.sendMessage(msg, pkFriend);
                     
                     Console.SetCursorPosition(0, ((Console.CursorTop > 0) ? Console.CursorTop - 1 : 0));
-                    Console.Write("\nYou: " + rawString.PadRight(Console.BufferWidth));
+                    Console.Write("".PadRight(Console.BufferWidth));
                 } while (rawString != backCommand);
                 isRunning = false;
             });

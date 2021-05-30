@@ -66,6 +66,7 @@ namespace instantMessagingClient.P2P
             }
             catch (Exception e)
             {
+                ConsoleHelpers.WriteRed("Your friend isn't online.");
                 ConsoleHelpers.WriteRed(e.Message);
                 ConsoleHelpers.HitEnterToContinue();
                 Application.GoTo<FriendList>();
@@ -110,7 +111,7 @@ namespace instantMessagingClient.P2P
             }
             catch (Exception e)
             {
-                ConsoleHelpers.WriteRed("Your friend disconnected");
+                ConsoleHelpers.WriteRed("Your friend disconnected.");
                 ConsoleHelpers.WriteRed(e.Message);
                 ConsoleHelpers.HitEnterToContinue();
                 myClient.Disconnect();
