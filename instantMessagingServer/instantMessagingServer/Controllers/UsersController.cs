@@ -135,6 +135,11 @@ namespace instantMessagingServer.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Return the username of friend by his id
+        /// </summary>
+        /// <param name="friendId">the friend id to retrieve the username</param>
+        /// <returns>the username, NotFound or the http request status</returns>
         [HttpGet("UserById/{friendId}")]
         public IActionResult getUserById(int friendId)
         {

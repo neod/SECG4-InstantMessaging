@@ -9,6 +9,7 @@ namespace instantMessagingServer.Models
 {
     public class Authentication
     {
+        // Singleton
         private static Authentication authentication;
 
         public static Authentication GetInstance() => authentication ??= new Authentication();
@@ -17,6 +18,14 @@ namespace instantMessagingServer.Models
         {
         }
 
+        // Instance
+
+        /// <summary>
+        /// Check if the username correspond to the token
+        /// </summary>
+        /// <param name="name">the username to check</param>
+        /// <param name="ClaimIDToken">the token to check</param>
+        /// <returns>true if is autenticate</returns>
         public bool isAutheticate(string name, Claim ClaimIDToken)
         {
             DatabaseContext db = new(Config.Configuration);
@@ -25,6 +34,10 @@ namespace instantMessagingServer.Models
             return user != null && db.Tokens.Any(t => t.Token == ClaimIDToken.Value && t.UserId == user.Id);
         }
 
+        /// <summary>
+        /// Generate a new unique IDToken
+        /// </summary>
+        /// <returns>the new unique IDToken</returns>
         public string GetIDToken()
         {
             DatabaseContext db = new(Config.Configuration);

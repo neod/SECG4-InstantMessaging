@@ -11,6 +11,9 @@ namespace instantMessagingServer.Models
 
         private static IConfiguration _Configuration;
 
+        /// <summary>
+        /// Acces to the configuration file
+        /// </summary>
         public static IConfiguration Configuration
         {
             get { return _Configuration; }

@@ -12,6 +12,15 @@ namespace instantMessagingServer.Models
 {
     public static class JWTTokens
     {
+        /// <summary>
+        /// JWToken Generation
+        /// </summary>
+        /// <param name="username">the username owner</param>
+        /// <param name="IDToken">the unique IDToken</param>
+        /// <param name="key">the symetrical key for encryption</param>
+        /// <param name="issuer">the token origin</param>
+        /// <param name="duration">the token duration valitidy</param>
+        /// <returns></returns>
         public static string Generate(string username, string IDToken, string key, string issuer, int duration)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

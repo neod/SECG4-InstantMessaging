@@ -17,6 +17,9 @@ namespace instantMessagingCore.Models.Dto
         /// </summary>
         public int FriendId { get; set; }
 
+        /// <summary>
+        /// The friend request status
+        /// </summary>
         public RequestStatus Status { get; set; }
 
         public Friends(int userId, int friendId)
@@ -26,6 +29,9 @@ namespace instantMessagingCore.Models.Dto
             Status = RequestStatus.waiting;
         }
 
+        /// <summary>
+        /// A enum of friend request status
+        /// </summary>
         public enum RequestStatus
         {
             waiting,
@@ -33,6 +39,9 @@ namespace instantMessagingCore.Models.Dto
             blocked
         }
 
+        /// <summary>
+        /// A enum of possible action on friend request
+        /// </summary>
         public enum Action
         {
             accept,
