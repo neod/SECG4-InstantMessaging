@@ -30,6 +30,10 @@ En terme de sécurité:
 
     Lors de l'envoi nous encryptons le message avec la clé publique du récepteur, les messages encrypté sont envoyés.
 
+## Report
+
+[Rapport.pdf](https://git.esi-bru.be/54456/secg4-instantmessaging/-/blob/master/Rapport.pdf)
+
 ## Dependencies
 This application work with .NET 5 framework, Entity Framework core tools and MariaDB/MySQL server.
 
