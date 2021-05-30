@@ -101,19 +101,28 @@ namespace instantMessagingServer.Controllers
                 }
                 else
                 {
-                    var salt = PasswordUtils.getSalt();
-                    var newUser = new Users(user.Username, PasswordUtils.hashAndSalt(user.Password, salt), salt);
-                    db.Users.Add(newUser);
+                    if(PasswordUtils.CheckPolicy(user.Username, user.Password))
+                    {
+                        var salt = PasswordUtils.getSalt();
+                        var newUser = new Users(user.Username, PasswordUtils.hashAndSalt(user.Password, salt), salt);
+                        db.Users.Add(newUser);
 
-                    var IDToken = Authentication.GetInstance().GetIDToken();
-                    var token = JWTTokens.Generate(user.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
-                    var ExpirationDate = DateTime.Now.AddMinutes(Int32.Parse(Configuration["Jwt:Duration"]));
-                    var dbToken = new Tokens(newUser.Id, IDToken, ExpirationDate);
-                    db.Tokens.Add(dbToken);
+                        var IDToken = Authentication.GetInstance().GetIDToken();
+                        var token = JWTTokens.Generate(user.Username, IDToken, Configuration["Jwt:Key"], Configuration["Jwt:Issuer"], Int32.Parse(Configuration["Jwt:Duration"]));
+                        var ExpirationDate = DateTime.Now.AddMinutes(Int32.Parse(Configuration["Jwt:Duration"]));
+                        var dbToken = new Tokens(newUser.Id, IDToken, ExpirationDate);
+                        db.Tokens.Add(dbToken);
 
-                    db.SaveChanges();
+                        db.SaveChanges();
 
-                    response = Ok(new Tokens(newUser.Id, token, ExpirationDate));
+                        response = Ok(new Tokens(newUser.Id, token, ExpirationDate));
+                    }
+                    else
+                    {
+                        response = Unauthorized("the password must be between 8 and 255 characters long" +
+                            ", have a capital letter, a lowercase letter, a special character and a number");
+                    }
+                    
                 }
             }
             else
