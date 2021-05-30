@@ -34,9 +34,38 @@ En terme de sécurité:
     //TODO Expliquer les sécu serveur
 
 
+## Check-list TODO
+1. Do I properly ensure confidentiality?
+    • Are sensitive data transmitted and stored properly?
+        Yes data is safely transfered with a bearer token.
+        Messages are encrypted before sending them.
+    • Are sensitive requests sent to the server transmitted securely?
+        Yes
+2. Do I properly ensure integrity of stored data?
+    The server check for the integrity.
+3. Do I properly ensure non-repudiation?
 
+4. Do my security features rely on secrecy, beyond cryptographic keys and access codes?
+    No
+5. Am I vulnerable to injection?
+    • URL, SQL, Javascript and dedicated parser injections
+    No
+6. Am I vulnerable to data remanence attacks?
 
-## Build
+7. Am I vulnerable to fraudulent request forgery?
+
+8. Am I monitoring enough user activity so that I can detect malicious intents, or analyse an attack a posteriori?
+
+9. Am I using components with know vulnerabilities?
+
+10. Is my system updated?
+    Yes we're using .NET CORE 5
+11. Is my access control broken (cf. OWASP 10)?
+
+12. Is my authentication broken (cf. OWASP 10)?
+
+13. Are my general security features misconfigured (cf. OWASP 10)?
+
 
 ### Dependencies
 InstantMessagingServer:
