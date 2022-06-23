@@ -39,7 +39,7 @@ namespace instantMessagingClient.Model
                 {
                     while (isRunning)
                     {
-                        restClient.sendHeartbeat();
+                        restClient.SendHeartbeat();
                         Thread.Sleep(60_000);
                     }
                 });

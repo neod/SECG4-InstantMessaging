@@ -81,7 +81,7 @@ namespace instantMessagingClient.Pages
                 var myPort = Convert.ToUInt16(random.Next(49153, 65534));
                 //var param = new Peers(Session.tokens.UserId, Localipv4, ipv6.ToString(), myPort, DateTime.Now);
                 var param = new Peers(Session.tokens.UserId, Localipv4, Localipv4, myPort, DateTime.Now);
-                rest.postPeers(param);
+                rest.PostPeers(param);
                 Session.communication = new TCP(Localipv4, Convert.ToString((int)myPort));
                 Session.communication.startListener();
                 Session.hasAlreadyStarted = true;

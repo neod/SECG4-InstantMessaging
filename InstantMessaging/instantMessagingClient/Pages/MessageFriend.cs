@@ -19,8 +19,8 @@ namespace instantMessagingClient.Pages
 
             //get public key & peers of friend
             Rest rest = new Rest();
-            var reponse = rest.getPublicKeyFriend(ID);
-            var responsePeers = rest.getPeers(ID);
+            var reponse = rest.GetPublicKeyFriend(ID);
+            var responsePeers = rest.GetPeers(ID);
 
             postKey friendsPublicKeys = JsonConvert.DeserializeObject<postKey>(reponse.Content);
             friendsPublicKeys.ToStringNormal();

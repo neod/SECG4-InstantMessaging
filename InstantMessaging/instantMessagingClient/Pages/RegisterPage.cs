@@ -77,7 +77,7 @@ namespace instantMessagingClient.Pages
                 //Generate a new private and public key, store the public key on the server and store the private one in our local
                 //database
                 RSAManager myKeys = new RSAManager();
-                IRestResponse publicKeyResponse = rest.postKey(myKeys.GetKey(false));
+                IRestResponse publicKeyResponse = rest.PostKey(myKeys.GetKey(false));
                 if (publicKeyResponse is {IsSuccessful: true})
                 {
                     var myPrivateKey = myKeys.GetKey(true);

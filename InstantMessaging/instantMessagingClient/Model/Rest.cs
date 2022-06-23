@@ -33,7 +33,7 @@ namespace instantMessagingClient.Model
             this.client = new RestClient(baseUrl);
         }
 
-        private static bool isTokenDateValid()
+        private static bool IsTokenDateValid()
         {
             bool Answer = true;
             int res = DateTime.Compare(Session.tokens.ExpirationDate, DateTime.Now);
@@ -45,12 +45,12 @@ namespace instantMessagingClient.Model
             return Answer;
         }
 
-        private static bool updateToken()
+        private static bool UpdateToken()
         {
             bool connected = true;
-            if (!isTokenDateValid())
+            if (!IsTokenDateValid())
             {
-                Rest rest = new Rest();
+                Rest rest = new();
                 var response = rest.Login(Session.sessionUsername, Session.sessionPassword);
                 if (response != null)
                 {
@@ -79,9 +79,9 @@ namespace instantMessagingClient.Model
         /// Checks if the user token is still valid, if not update it
         /// </summary>
         /// <returns>True if the token is valid</returns>
-        private static bool isValid()
+        private static bool IsValid()
         {
-            if (updateToken()) return true;
+            if (UpdateToken()) return true;
             ConsoleHelpers.WriteRed("Invalid token. You will be disconnected.");
             ConsoleHelpers.HitEnterToContinue();
             LoggedInHomePage.ClickDisconnect();
@@ -113,10 +113,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Gets the friend list
         /// </summary>
-        public IRestResponse getMyFriendList()
+        public IRestResponse GetMyFriendList()
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Friends", Method.GET);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
@@ -129,10 +129,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Gets all friend requests
         /// </summary>
-        public IRestResponse getFriendRequests()
+        public IRestResponse GetFriendRequests()
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("api/Friends/pendingrequest", Method.GET);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
@@ -148,7 +148,7 @@ namespace instantMessagingClient.Model
         public IRestResponse SendFriendRequest(string FriendName)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("api/Friends/request/{friendName}", Method.GET);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
@@ -165,7 +165,7 @@ namespace instantMessagingClient.Model
         public IRestResponse ActionFriendRequest(Friends.Action requestAction, int _ID)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("api/Friends/pendingrequest/{senderId}/{requestAction}", Method.GET);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);
@@ -180,10 +180,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Post our public key to the server
         /// </summary>
-        public IRestResponse postKey(string getKey)
+        public IRestResponse PostKey(string getKey)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Keys/submit", DataFormat.Json);
                 var param = new postKey(Session.tokens.UserId, getKey, DateTime.Now);
@@ -199,10 +199,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Gets the public key of a specific user
         /// </summary>
-        public IRestResponse getPublicKeyFriend(int id)
+        public IRestResponse GetPublicKeyFriend(int id)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Keys/get/{friendId}", Method.GET);
                 request.AddUrlSegment("friendId", id);
@@ -216,10 +216,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Post our peers information (ip address, port)
         /// </summary>
-        public IRestResponse postPeers(Peers peer)
+        public IRestResponse PostPeers(Peers peer)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Peers/Submit", Method.POST, DataFormat.Json);
                 request.AddJsonBody(peer);
@@ -234,10 +234,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Gets the peers of a friend
         /// </summary>
-        public IRestResponse getPeers(int id)
+        public IRestResponse GetPeers(int id)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Peers/{friendId}", Method.GET);
                 request.AddUrlSegment("friendId", id);
@@ -251,10 +251,10 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Gets the name of a user by id
         /// </summary>
-        public IRestResponse getUserById(int id)
+        public IRestResponse GetUserById(int id)
         {
             IRestResponse rep = null;
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Users/UserById/{friendId}", Method.GET);
                 request.AddUrlSegment("friendId", id);
@@ -268,9 +268,9 @@ namespace instantMessagingClient.Model
         /// <summary>
         /// Send a heart beat
         /// </summary>
-        public void sendHeartbeat()
+        public void SendHeartbeat()
         {
-            if (isValid())
+            if (IsValid())
             {
                 this.request = new RestRequest("/api/Peers/heartbeat", Method.PUT, DataFormat.None);
                 request.AddHeader("authorization", "Bearer " + Session.tokens.Token);

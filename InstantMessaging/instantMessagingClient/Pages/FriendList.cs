@@ -32,7 +32,7 @@ namespace instantMessagingClient.Pages
             Rest rest = new Rest();
 
             //for amis
-            var reponseMyFriends = rest.getMyFriendList();
+            var reponseMyFriends = rest.GetMyFriendList();
             if (reponseMyFriends is {IsSuccessful: true})
             {
                 Friends[] FriendList = JsonConvert.DeserializeObject<Friends[]>(reponseMyFriends.Content);
@@ -41,14 +41,14 @@ namespace instantMessagingClient.Pages
                     foreach (Friends friend in FriendList)
                     {
                         var friendUserId = friend.UserId == Session.tokens.UserId ? friend.FriendId : friend.UserId;
-                        var rep = rest.getUserById(friendUserId);
+                        var rep = rest.GetUserById(friendUserId);
                         MenuItems.Add(new MenuItem(rep.Content, () => Application.GoTo<Friend>(friendUserId, rep.Content)));
                     }
                 }
             }
             
             //for notif
-            var reponseFriendRequests = rest.getFriendRequests();
+            var reponseFriendRequests = rest.GetFriendRequests();
             if (reponseFriendRequests != null)
             {
                 if (reponseFriendRequests.IsSuccessful)
@@ -58,7 +58,7 @@ namespace instantMessagingClient.Pages
                     {
                         foreach (Friends friend in FriendList)
                         {
-                            var rep = rest.getUserById(friend.UserId);
+                            var rep = rest.GetUserById(friend.UserId);
                             MenuItems.Add(new MenuItem(rep.Content + " wants to add you.",
                                 () => Application.GoTo<Notification>(friend.UserId, rep.Content))
                             {
