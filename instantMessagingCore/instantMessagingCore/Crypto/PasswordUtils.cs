@@ -41,11 +41,9 @@ namespace instantMessagingCore.Crypto
         public static string getSalt()
         {
             byte[] bytes = new byte[128 / 8];
-            using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetBytes(bytes);
-                return BitConverter.ToString(bytes).Replace("-", "");
-            }
+            using RandomNumberGenerator rng = RandomNumberGenerator.Create();
+            rng.GetBytes(bytes);
+            return BitConverter.ToString(bytes).Replace("-", "");
         }
 
         private static readonly char[] alphabetLower = "abcdefghijklmnopqrstuvwxyz".ToCharArray();

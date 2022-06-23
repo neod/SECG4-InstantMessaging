@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using EasyConsoleApplication;
 using EasyConsoleApplication.Menus;
@@ -28,10 +29,16 @@ namespace instantMessagingClient.Pages
                 "https://wtfismyip.com/text",
                 "http://icanhazip.com"
             };
-            using var webclient = new WebClient();
+            using HttpClient webclient = new();
             foreach (var service in services)
             {
-                try { return IPAddress.Parse(webclient.DownloadString(service)); } catch { }
+                try { 
+                    return IPAddress.Parse(webclient.GetStringAsync(service).Result); 
+                } 
+                catch 
+                { 
+                    //TODO: implement error management
+                }
             }
             return null;
         }
