@@ -10,18 +10,18 @@ This repository contains the Secure Instant Messaging **student work of HE2B ESI
 [Rapport.pdf](https://github.com/neod/SECG4-InstantMessaging/blob/master/Rapport.pdf)
 
 ## Dependencies
-This application work with .NET 5 framework, Entity Framework core tools and MariaDB/MySQL server (SQLite for dev only).
+This application work with .NET 6 framework, Entity Framework core tools and MariaDB/MySQL server (SQLite for dev only).
 
-### To install .NET 5 SDK with SNAP
+### To install .NET 6 SDK with SNAP
 
 ```
-sudo snap install dotnet-sdk --classic --channel=5.0
+sudo snap install dotnet-sdk --classic --channel=6.0
 ```
 
 ### To install EF core tools
 
 ```
-dotnet tool install --global dotnet-ef --version 5.0.6
+dotnet tool install --global dotnet-ef
 ```
 
 ### To configure Database (MariaDB or MySQL)
