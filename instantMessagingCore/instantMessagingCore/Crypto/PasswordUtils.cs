@@ -10,7 +10,7 @@ namespace instantMessagingCore.Crypto
 {
     public class PasswordUtils
     {
-        private static UTF8Encoding encoding = new UTF8Encoding();
+        private static readonly UTF8Encoding encoding = new();
 
         /// <summary>
         /// Hash and salt the password
@@ -18,27 +18,25 @@ namespace instantMessagingCore.Crypto
         /// <param name="password">the original password</param>
         /// <param name="salt">the salt to used</param>
         /// <returns>a salted and hashed password</returns>
-        public static string hashAndSalt(string password, string salt) => sha256(password + salt);
+        public static string HashAndSalt(string password, string salt) => Sha256(password + salt);
 
         /// <summary>
         /// Hash a value
         /// </summary>
         /// <param name="value">the value to hash</param>
         /// <returns>The value hashed</returns>
-        public static string sha256(string value)
+        public static string Sha256(string value)
         {
-            using (SHA256 hash = SHA256.Create())
-            {
-                byte[] bytes = hash.ComputeHash(encoding.GetBytes(value));
-                return BitConverter.ToString(bytes).Replace("-", "");
-            }
+            using SHA256 hash = SHA256.Create();
+            byte[] bytes = hash.ComputeHash(encoding.GetBytes(value));
+            return BitConverter.ToString(bytes).Replace("-", "");
         }
 
         /// <summary>
         /// Generate a salt for the password
         /// </summary>
         /// <returns>A new salt</returns>
-        public static string getSalt()
+        public static string GetSalt()
         {
             byte[] bytes = new byte[128 / 8];
             using RandomNumberGenerator rng = RandomNumberGenerator.Create();

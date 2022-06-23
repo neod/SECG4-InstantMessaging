@@ -84,7 +84,7 @@ namespace instantMessagingClient.Model
             if (updateToken()) return true;
             ConsoleHelpers.WriteRed("Invalid token. You will be disconnected.");
             ConsoleHelpers.HitEnterToContinue();
-            LoggedInHomePage.clickDisconnect();
+            LoggedInHomePage.ClickDisconnect();
             return false;
         }
 

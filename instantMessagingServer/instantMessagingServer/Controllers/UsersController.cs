@@ -41,7 +41,7 @@ namespace instantMessagingServer.Controllers
 
                 DatabaseContext db = new(Configuration);
                 var users = db.Users.Where(u => u.Username == user.Username).ToList();
-                var selectedUser = users.FirstOrDefault(u => u.Password == PasswordUtils.hashAndSalt(user.Password, u.Salt));
+                var selectedUser = users.FirstOrDefault(u => u.Password == PasswordUtils.HashAndSalt(user.Password, u.Salt));
 
                 if (selectedUser != null)
                 {
@@ -105,8 +105,8 @@ namespace instantMessagingServer.Controllers
                 {
                     if (PasswordUtils.CheckPolicy(user.Username, user.Password))
                     {
-                        var salt = PasswordUtils.getSalt();
-                        var newUser = new Users(user.Username, PasswordUtils.hashAndSalt(user.Password, salt), salt);
+                        var salt = PasswordUtils.GetSalt();
+                        var newUser = new Users(user.Username, PasswordUtils.HashAndSalt(user.Password, salt), salt);
                         db.Users.Add(newUser);
 
                         var IDToken = Authentication.GetInstance().GetIDToken();

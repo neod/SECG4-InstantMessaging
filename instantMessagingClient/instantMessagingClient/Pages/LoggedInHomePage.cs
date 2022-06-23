@@ -20,7 +20,7 @@ namespace instantMessagingClient.Pages
         /// <returns>IPAddress</returns>
         public static IPAddress GetMyIp()
         {
-            List<string> services = new List<string>()
+            List<string> services = new()
             {
                 "https://ipv4.icanhazip.com",
                 "https://api.ipify.org",
@@ -64,8 +64,8 @@ namespace instantMessagingClient.Pages
             Title = "Home: " + Session.sessionUsername + "(" + Session.tokens.UserId + ")";
             TitleColor = ConsoleColor.Green;
             Body = "-----";
-            MenuItems.Add(new MenuItem("Friends list", clickFriendsList));
-            MenuItems.Add(new MenuItem("Disconnect", clickDisconnect)
+            MenuItems.Add(new MenuItem("Friends list", ClickFriendsList));
+            MenuItems.Add(new MenuItem("Disconnect", ClickDisconnect)
             {
                 Color = ConsoleColor.Yellow
             });
@@ -74,10 +74,10 @@ namespace instantMessagingClient.Pages
             //start the heartbeat
             if (Session.hasAlreadyStarted == false)
             {
-                Rest rest = new Rest();
+                Rest rest = new();
                 string Localipv4 = GetLocalIPAddress();
                 IPAddress ipv6 = GetMyIp();
-                Random random = new Random();
+                Random random = new();
                 var myPort = Convert.ToUInt16(random.Next(49153, 65534));
                 //var param = new Peers(Session.tokens.UserId, Localipv4, ipv6.ToString(), myPort, DateTime.Now);
                 var param = new Peers(Session.tokens.UserId, Localipv4, Localipv4, myPort, DateTime.Now);
@@ -89,7 +89,7 @@ namespace instantMessagingClient.Pages
             }
         }
 
-        private void clickFriendsList()
+        private void ClickFriendsList()
         {
             Application.GoTo<FriendList>();
         }
@@ -97,7 +97,7 @@ namespace instantMessagingClient.Pages
         /// <summary>
         /// Disconnects
         /// </summary>
-        public static void clickDisconnect()
+        public static void ClickDisconnect()
         {
             Session.sessionPassword = null;
             Session.sessionUsername = null;
